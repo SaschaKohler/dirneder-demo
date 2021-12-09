@@ -4,18 +4,17 @@
       <v-container fluid>
         <v-row align="center" justify="center" style="height: 100vh">
           <v-col cols="12" sm="12" md="10" lg="4">
-            <v-card>
+            <v-card class="rounded-xl">
               <v-card-title class="d-flex align-center justify-center">
-                <Link :href="route('/')">
-                  <application-logo style="height: 75" />
+                <Link :href="route('/')" class="text-decoration-none">
+                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
+                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+
                 </Link>
               </v-card-title>
               <v-card-text>
-                <p class="font-weight-semibold text--primary mb-2">
-                  Welcome to Laravel! 👋🏻
-                </p>
-                <p class="mb-2">
-                  Please sign-in to your account and start the adventure
+                <p class="font-weight-semibold brown--text mb-2 text-center">
+                  Mitarbeiter - Kunden - Aufträge
                 </p>
               </v-card-text>
               <v-card-text>
@@ -25,6 +24,7 @@
                     prepend-inner-icon="mdi-email"
                     label="Email"
                     type="email"
+                    color="green darken-3"
                     outlined
                     dense
                     :error-messages="form.errors.email"
@@ -32,7 +32,8 @@
                   <v-text-field
                     v-model="form.password"
                     prepend-inner-icon="mdi-lock"
-                    label="Password"
+                    label="Passwort"
+                    color="green darken-3"
                     outlined
                     dense
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -45,22 +46,22 @@
                   >
                     <v-checkbox
                       v-model="form.remember_me"
-                      label="Remember me"
+                      label="Merken"
+                      color="brown"
                     />
-                    <Link :href="route('password.request')">
-                      Forgot Password?
+                    <Link :href="route('password.request')" class="brown--text">
+                      Passwort vergessen?
                     </Link>
                   </div>
-                  <v-btn :loading="form.processing" type="submit" block color="primary" class="mt-3"
-                    >Login</v-btn
-                  >
+                  <v-btn :loading="form.processing" type="submit" block color="brown lighten-4 brown--text text--darken-4" class="mt-3"
+                    >Login</v-btn>
                 </v-form>
               </v-card-text>
               <v-card-text
                 class="d-flex align-center justify-center flex-wrap mt-2"
               >
-                <span class="me-2"> New on our platform? </span>
-                <Link :href="route('register')"> Create an account </Link>
+                <span class="me-2"> Neu hier ? </span>
+                <Link :href="route('register')" class="brown--text"> Account anlegen </Link>
               </v-card-text>
             </v-card>
           </v-col>

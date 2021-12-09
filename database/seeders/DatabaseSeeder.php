@@ -2,7 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use App\Models\Employee;
+use App\Models\EmployeeCategory;
+use App\Models\Event;
+use App\Models\EventEmployee;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        Employee::factory(100)->create();
+        User::factory(1)->create();
+        EmployeeCategory::factory(3)->create();
+        Employee::factory(5)->create();
+        Customer::factory(8)->create();
+        Event::factory(5)->create();
+        EventEmployee::factory(5)->create();
     }
 }

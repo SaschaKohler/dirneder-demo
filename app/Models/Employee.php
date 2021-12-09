@@ -10,15 +10,20 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'job_title',
-        'email',
-        'address'
-    ];
+    protected $guarded = ['id'];
 
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->format('H:i, d M Y');
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class,'event_employee');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(EmployeeCategory::class);
     }
 }

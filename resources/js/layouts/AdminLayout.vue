@@ -32,7 +32,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar color="primary" clipped-left fixed dark app>
+    <v-app-bar color="green darken-2" clipped-left fixed dark app>
       <v-app-bar-nav-icon
         v-if="$vuetify.breakpoint.smAndDown"
         @click.stop="drawer = !drawer"
@@ -63,8 +63,13 @@ export default {
     return {
       drawer: !this.$vuetify.breakpoint.smAndDown,
       items: [
-        { icon: "mdi-apps", title: "Home", to: "home" },
-        { icon: "mdi-account", title: "Employee", to: "employee.index" },
+        { icon: "mdi-apps", title: "Start", to: "home" },
+        { icon: "mdi-run", title: "Mitarbeiter", to: "employee.index" },
+        { icon: "mdi-account-multiple", title: "Kunden", to: "customer.index" },
+        { icon: "mdi-newspaper", title: "Aufträge", to: "event.index" },
+        { icon: "mdi-account-multiple", title: "Anhänger", to: "customer.index" },
+        { icon: "mdi-jeepney", title: "ZugFahrzeuge", to: "customer.index" },
+
       ],
       miniVariant: false,
     };

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\EmployeeCategory;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,9 +20,11 @@ class EmployeeController extends Controller
             ->when($request->search, function ($query, $value) {
                 $query->where('name', 'LIKE', '%'.$value.'%');
             })
+            ->with('category')
             ->paginate($request->page_size ?? 10);
         return Inertia::render('employee/index', [
             'items' => $data,
+            'categories' => EmployeeCategory::all()
         ]);
     }
 
@@ -29,14 +32,14 @@ class EmployeeController extends Controller
     {
         $data = $this->validate($request, [
             'name' => 'required|string',
-            'job_title' => 'required|string',
             'email' => 'required|email',
             'address' => 'required|string',
+            'category_id' => 'required|integer'
         ]);
         Employee::create($data);
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Success create employee!',
+            'text' => 'Datensatz erstellt!',
         ]);
     }
 
@@ -44,14 +47,14 @@ class EmployeeController extends Controller
     {
         $data = $this->validate($request, [
             'name' => 'required|string',
-            'job_title' => 'required|string',
             'email' => 'required|email',
-            'address' => 'required|string'
+            'address' => 'required|string',
+            'category_id' => 'required|integer'
         ]);
         $employee->update($data);
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Success edit employee!',
+            'text' => 'Datensatz geändert!',
         ]);
     }
 
@@ -60,7 +63,7 @@ class EmployeeController extends Controller
         $employee->delete();
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Success delete employee!',
+            'text' => 'Datensatz gelöscht!',
         ]);
     }
 }
