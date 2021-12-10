@@ -140,6 +140,11 @@ export default {
           href: "/home",
         },
         {
+          text: "Belegschaft",
+          disabled: false,
+          href: "",
+        },
+        {
           text: "Mitarbeiter",
           disabled: true,
           href: "/employee",

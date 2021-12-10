@@ -15,7 +15,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $data = Event::all();
+        $data = Event::query()->with('customer')->get();
         return Inertia::render('home',[
             'events' => $data
         ]);

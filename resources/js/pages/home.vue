@@ -58,12 +58,20 @@
           :weekdays="weekday"
           :type="type"
           :events="events"
-          :event-category="events.type"
           :event-overlap-mode="mode"
           :event-overlap-threshold="30"
           :event-color="events.color"
-          @click:date="viewDay"
-        ></v-calendar>
+          @click:date="viewDay">
+          <template v-slot:event="{ event }">
+            <div class="">
+            <p class="text-bold text-caption text-center">{{ event.name }}</p>
+            <p class="text-h5">{{ event.type }}</p>
+            <p>Kunde: {{event.customer.firstName}} {{event.customer.lastName}}</p>
+            <p>Telefon: {{event.customer.phone1}}</p>
+            <p>{{event.customer.PLZ}} {{event.customer.city}} {{event.customer.street}}</p>
+            </div>
+        </template>
+        </v-calendar>
       </v-sheet>
     </div>
   </admin-layout>

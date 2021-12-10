@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -34,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
                 'message' => Session::get('message'),
             ];
         });
+
     }
 }

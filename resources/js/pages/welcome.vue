@@ -18,7 +18,7 @@
     <v-main>
       <v-container>
         <v-card>
-          <v-card-title class="text-center" >Dirneder - Mitarbeiter - Kunden - Fahrzeuge - Aufträge</v-card-title>
+          <v-card-title class="text-center text-h3" >Dirneder - Mitarbeiter - Kunden - Fahrzeuge - Aufträge</v-card-title>
         </v-card>
       </v-container>
     </v-main>
