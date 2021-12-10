@@ -14,6 +14,7 @@ based on https://github.com/ahmadfaizk/laravel-inertiajs-vuetify-starterkit
 - Laravel Mix  /  ok-> npm mix watch
 - SPA (Single Page Application)  / php artisan serve -q
 - Stefan mag php($) nicht.
+-> please type the -docker composer up- in your terminal .. for the mysql container,friends...
 
 ## License
 
