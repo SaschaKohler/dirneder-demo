@@ -8,10 +8,11 @@
       app
     >
       <v-list nav>
-        <v-list-item-group :value="indexMenu">
+        <v-list-item-group :value="indexMenu" color="dirneder">
           <v-list-item
             v-for="(item, i) in items"
             :key="i"
+            v-if="!item.sublinks"
             @click="goToPage(item.to)"
           >
             <v-list-item-action>
@@ -21,6 +22,32 @@
               <v-list-item-title v-text="item.title" />
             </v-list-item-content>
           </v-list-item>
+
+          <v-list-group
+            v-else
+            no-action
+            color="dirneder"
+          >
+              <template v-slot:activator color="brown">
+                <v-list-item-action>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.title"/>
+                </v-list-item-content>
+              </template>
+            <v-list-item
+              v-for="(item, i) in item.sublinks"
+              :key="i"
+              @click="goToPage(item.to)">
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title" />
+              </v-list-item-content>
+            </v-list-item>
+
+          </v-list-group>
+
+
           <v-list-item @click="logout">
             <v-list-item-action>
               <v-icon>mdi-exit-to-app</v-icon>
@@ -64,7 +91,13 @@ export default {
       drawer: !this.$vuetify.breakpoint.smAndDown,
       items: [
         { icon: "mdi-apps", title: "Start", to: "home" },
-        { icon: "mdi-run", title: "Mitarbeiter", to: "employee.index" },
+        { icon: "mdi-run", title: "Belegschaft", to: "employee.index",
+          sublinks : [
+            { icon: "mdi-run", title: "Mitarbeiter", to: "employee.index"},
+            {icon: "mdi-run", title: "Kategorien", to: "employeeCategory.index"},
+
+          ]
+        },
         { icon: "mdi-account-multiple", title: "Kunden", to: "customer.index" },
         { icon: "mdi-newspaper", title: "Aufträge", to: "event.index" },
         { icon: "mdi-account-multiple", title: "Anhänger", to: "customer.index" },

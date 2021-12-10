@@ -6,15 +6,23 @@
           <v-col cols="12" sm="12" md="10" lg="4">
             <v-card>
               <v-card-title class="d-flex align-center justify-center">
-                <Link :href="route('/')">
-                  <application-logo style="height: 75" />
+                <Link :href="route('/')" class="text-decoration-none">
+                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
+                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+
                 </Link>
               </v-card-title>
+              <v-card-text>
+                <p class="font-weight-semibold brown--text mb-2 text-center">
+                  Mitarbeiter - Kunden - Aufträge
+                </p>
+              </v-card-text>
+
               <v-card-text v-if="status">
                 <v-alert type="success">{{ status }}</v-alert>
               </v-card-text>
               <v-card-text>
-                <p class="mb-2">You forgot your password? Here you can easily retrieve a new password.</p>
+                <p class="mb-2">Du hast Dein Passwort vergessen. Wir senden Dir ein Neues</p>
               </v-card-text>
               <v-card-text>
                 <v-form @submit.prevent="submit">
@@ -27,8 +35,8 @@
                     dense
                     :error-messages="form.errors.email"
                   />
-                  <v-btn :loading="form.processing" type="submit" block color="primary" class="mt-3"
-                    >Request New Password</v-btn
+                  <v-btn :loading="form.processing" type="submit" block color="dirneder" class="mt-3 white--text"
+                    >Neues Passwort anfordern!</v-btn
                   >
                 </v-form>
               </v-card-text>

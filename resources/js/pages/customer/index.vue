@@ -56,6 +56,7 @@
             :error-messages="form.errors.firstName"
             type="text"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
@@ -63,6 +64,7 @@
             label="Nachname"
             :error-messages="form.errors.lastName"
             type="text"
+            color="brown"
             outlined
             dense
           />
@@ -72,6 +74,7 @@
             :error-messages="form.errors.street"
             type="text"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
@@ -80,6 +83,7 @@
             :error-messages="form.errors.city"
             type="text"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
@@ -88,6 +92,7 @@
             :error-messages="form.errors.PLZ"
             type="text"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
@@ -95,6 +100,7 @@
             label="Email"
             :error-messages="form.errors.email"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
@@ -102,12 +108,14 @@
             label="Mobil"
             :error-messages="form.errors.phone1"
             outlined
+            color="brown"
             dense
           />
           <v-text-field
             v-model="form.phone2"
             label="Telefon"
             :error-messages="form.errors.phone2"
+            color="brown"
             outlined
             dense
           />
@@ -116,6 +124,7 @@
             label="Notizen"
             :error-messages="form.errors.notes"
             outlined
+            color="brown"
             dense
           />
           <div class="d-flex"></div>
@@ -123,7 +132,7 @@
         <v-card-actions>
           <v-btn :disabled="form.processing" text color="error" @click="dialog = false">Abbrechen</v-btn>
           <v-spacer />
-          <v-btn :loading="form.processing" color="primary" @click="submit"
+          <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
           >Speichern</v-btn
           >
         </v-card-actions>
@@ -278,7 +287,7 @@ export default {
         });
       } else {
         this.form.post(route("customer.store"), {
-          preverseScroll: true,
+          preserveScroll: true,
           onSuccess: () => {
             this.isLoading = false;
             this.dialog = false;

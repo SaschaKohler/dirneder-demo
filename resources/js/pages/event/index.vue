@@ -257,9 +257,7 @@ export default {
     },
     dialog(visible){
       if(visible) {
-        console.log(this.items.data);
       } else {
-        console.log('closed')
       }
     }
   },
