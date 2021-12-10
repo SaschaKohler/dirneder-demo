@@ -136,9 +136,15 @@ export default {
           href: "/home",
         },
         {
+<<<<<<< HEAD
           text: "Belegschaft",
           disabled: false,
           href: "",
+=======
+          text: "Mitarbeiter",
+          disabled: false,
+          href: "/employee",
+>>>>>>> origin/master
         },
         {
           text: "Kategorien",

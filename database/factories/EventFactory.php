@@ -26,7 +26,11 @@ class EventFactory extends Factory
         $start = $this->faker->dateTimeBetween('now','+1 day');
         $end = $this->faker->dateTimeBetween($start,'+2 day');
         $colors =  ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'];
+<<<<<<< HEAD
         $type = ['Baumpflege','Zaunbau','Fundament','Transport','Sonstiges'];
+=======
+        $type = ['Baumpflege','Zaunbau','Funadment','Transport','Sonstiges'];
+>>>>>>> origin/master
         return [
             'name' => $this->faker->jobTitle,
             'start' => $start,
