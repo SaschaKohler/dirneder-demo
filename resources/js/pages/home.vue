@@ -41,6 +41,9 @@
           label="Wochentage"
           class="ma-2"
         ></v-select>
+        <v-toolbar-title class="pt-3 pl-3" v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           icon
@@ -63,7 +66,61 @@
           :event-overlap-threshold="30"
           :event-color="events.color"
           @click:date="viewDay"
-        ></v-calendar>
+          @click:event="showEvent"
+        >
+          <template v-slot:event="{ event }">
+            <p>{{ event.customer.lastName}}</p>
+          </template>
+        </v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card
+            color="grey lighten-4"
+            min-width="350px"
+            flat
+          >
+            <v-toolbar
+              :color="selectedEvent.color"
+              dark
+            >
+              <v-btn icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
+              <div class="flex-grow-1"></div>
+              <v-btn icon>
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+                <p class="text-h5">
+                  {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
+                </p>
+              <p class="text-caption">
+                {{selectedEvent.customer.street}}
+              </p>
+              <p class="text-bold">
+                {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
+              </p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="secondary"
+                @click="selectedOpen = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
       </v-sheet>
     </div>
   </admin-layout>
@@ -76,6 +133,21 @@ export default {
   components: {AdminLayout},
   props: ["events"],
   data: () => ({
+    selectedEvent: {
+      id:null,
+      start:null,
+      customer: {
+        firstName:null,
+        lastName:null,
+        PLZ:null,
+        street:null,
+        city:null,
+      },
+      color:null,
+    },
+
+    selectedElement: null,
+    selectedOpen: false,
     breadcrumbs: [
       {
         text: "App",
@@ -110,6 +182,28 @@ export default {
     viewDay ({ date }) {
       this.focus = date
       this.type = 'day'
+    },
+    showEvent ({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent.color = event.color
+        this.selectedEvent.type = event.type
+        this.selectedEvent.customer.lastName = event.customer.lastName
+        this.selectedEvent.customer.firstName = event.customer.firstName
+        this.selectedEvent.customer.street = event.customer.street
+        this.selectedEvent.customer.PLZ = event.customer.PLZ
+        this.selectedEvent.customer.city = event.customer.city
+
+        console.log(this.selectedEvent);
+        this.selectedElement = nativeEvent.target
+        setTimeout(() => this.selectedOpen = true, 10)
+      }
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        setTimeout(open, 10)
+      } else {
+        open()
+      }
+      nativeEvent.stopPropagation()
     },
   }
 

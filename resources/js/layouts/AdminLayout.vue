@@ -39,7 +39,8 @@
             <v-list-item
               v-for="(item, i) in item.sublinks"
               :key="i"
-              @click="goToPage(item.to)">
+              @click="goToPage(item.to)"
+            >
               <v-list-item-content>
                 <v-list-item-title v-text="item.title" />
               </v-list-item-content>
