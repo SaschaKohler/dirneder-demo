@@ -36,10 +36,10 @@
         {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
       </template>
       <template v-slot:item.start="{ item }">
-        <span>{{ new Date(item.start).toLocaleString() }}</span>
+        <span>{{(item.start).substring(0,10) }}</span>
       </template>
       <template v-slot:item.end="{ item }">
-        <span>{{ new Date(item.end).toLocaleString() }}</span>
+        <span>{{ (item.end).substring(0,10) }}</span>
       </template>
       <template v-slot:item.customer_id="{ item }">
         {{ item.customer.lastName}}

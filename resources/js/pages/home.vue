@@ -69,7 +69,7 @@
           @click:event="showEvent"
         >
           <template v-slot:event="{ event }">
-            <p>{{ event.customer.lastName}}</p>
+            <p class="text-caption">{{event.type}}/{{ event.customer.lastName}}</p>
           </template>
         </v-calendar>
         <v-menu
@@ -87,19 +87,11 @@
               :color="selectedEvent.color"
               dark
             >
-              <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
               <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
               <div class="flex-grow-1"></div>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
             </v-toolbar>
             <v-card-text>
+              <p class="text-lg-subtitle-2">{{ selectedEvent.start }} - {{ selectedEvent.end}}</p>
                 <p class="text-h5">
                   {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
                 </p>
@@ -109,6 +101,11 @@
               <p class="text-bold">
                 {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
               </p>
+              <ul>Team:
+                <li v-for="employee in selectedEvent.employees" :key="employee.id">
+                  {{employee.name}}
+                </li>
+              </ul>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -136,6 +133,7 @@ export default {
     selectedEvent: {
       id:null,
       start:null,
+      end:null,
       customer: {
         firstName:null,
         lastName:null,
@@ -187,13 +185,16 @@ export default {
       const open = () => {
         this.selectedEvent.color = event.color
         this.selectedEvent.type = event.type
+        this.selectedEvent.employees = event.employees
+        this.selectedEvent.start = (event.start).substring(10,16)
+        this.selectedEvent.end = (event.end).substring(10,16)
+
         this.selectedEvent.customer.lastName = event.customer.lastName
         this.selectedEvent.customer.firstName = event.customer.firstName
         this.selectedEvent.customer.street = event.customer.street
         this.selectedEvent.customer.PLZ = event.customer.PLZ
         this.selectedEvent.customer.city = event.customer.city
 
-        console.log(this.selectedEvent);
         this.selectedElement = nativeEvent.target
         setTimeout(() => this.selectedOpen = true, 10)
       }

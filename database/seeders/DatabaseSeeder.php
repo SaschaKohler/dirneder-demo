@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\EmployeeCategory;
 use App\Models\Event;
 use App\Models\EventEmployee;
+use App\Models\EventUser;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -21,9 +22,9 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(1)->create();
         EmployeeCategory::factory(3)->create();
-        Employee::factory(5)->create();
+//        Employee::factory(5)->create();
         Customer::factory(8)->create();
         Event::factory(5)->create();
-        EventEmployee::factory(5)->create();
+        EventUser::factory(5)->create();
     }
 }

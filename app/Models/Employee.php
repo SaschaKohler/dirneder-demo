@@ -19,11 +19,16 @@ class Employee extends Model
 
     public function events()
     {
-        return $this->belongsToMany(Event::class,'event_employee');
+        return $this->belongsToMany(Event::class,'event_user');
     }
 
     public function category()
     {
         return $this->belongsTo(EmployeeCategory::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }

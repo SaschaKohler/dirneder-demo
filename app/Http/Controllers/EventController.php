@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
@@ -31,7 +32,7 @@ class EventController extends Controller
         return Inertia::render('event/index', [
             'items' => $data,
             'customers' => Customer::all(),
-            'employees' => Employee::all()
+            'employees' => User::all()
         ]);
     }
 
@@ -59,12 +60,13 @@ class EventController extends Controller
     {
         $data = $this->validate($request, [
             'name' => 'required|string',
+            'color' => 'nullable',
             'start' => 'required',
             'end' => 'required',
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',
-            'employees' => 'required|array|min:1',
+            'employees' => 'required|array|min:1',   // employees = users !
             //  'employees.*' => 'numeric'
         ]);
 

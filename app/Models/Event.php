@@ -13,10 +13,14 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    public function getCreatedAtAttribute($value)
-    {
-        return Carbon::parse($value)->format('d M y');
-    }
+    protected $casts = [
+
+    ];
+
+//    public function getCreatedAtAttribute($value)
+//    {
+//        return Carbon::parse($value)->format('d M y');
+//    }
 
 
     public function customer()
@@ -26,6 +30,6 @@ class Event extends Model
 
     public function employees()
     {
-        return $this->belongsToMany(Employee::class,'event_employee');
+        return $this->belongsToMany(User::class,'event_user');
     }
 }
