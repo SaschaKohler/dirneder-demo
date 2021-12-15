@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
         EmployeeCategory::factory(3)->create();
         Customer::factory(8)->create();
         Event::factory(5)->create();
-        EventUser::factory(5)->create();
         Vehicle::factory(16)->create();
+        EventUser::factory(5)->create();
         EventVehicle::factory(8)->create();
     }
 }

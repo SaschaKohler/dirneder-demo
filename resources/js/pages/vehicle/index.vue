@@ -174,7 +174,7 @@
 <script>
 import AdminLayout from "../../layouts/AdminLayout.vue";
 export default {
-  props: ["items","customers","employees","isAdmin"],
+  props: ["items","customers","employees","count"],
   components: { AdminLayout },
   data() {
     return {
@@ -229,7 +229,13 @@ export default {
   watch: {
     options: function (val) {
       this.params.page = val.page;
-      this.params.page_size = val.itemsPerPage;
+      console.log(this.$props.count)
+      if(val.itemsPerPage === -1) { // get page_size 'All' (-1)
+        this.params.page_size = this.$props.count;
+      }
+      else {
+        this.params.page_size = val.itemsPerPage
+      }
       if (val.sortBy.length != 0) {
         this.params.sort_by = val.sortBy[0];
         this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
@@ -310,8 +316,6 @@ export default {
       }
     },
   },
-  mounted() {
-    this.setEmployees()
-  }
+
 };
 </script>

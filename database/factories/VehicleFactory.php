@@ -33,7 +33,8 @@ class VehicleFactory extends Factory
             'Zürich', 'keine Polizze', 'Wiener Städtische', 'Uniqa', 'keine Polizze', 'Wiener Städtische',
             'Generali', 'Zürich', 'Wiener Städtische', 'Wüstenrot',];
 
-        $type = [1, 2, 3, 3, 2, 4, 5, 5, 6, 5, 4, 6, 2, 5, 4, 2];
+//        $type = [1, 2, 3, 3, 2, 4, 5, 5, 6, 5, 4, 6, 2, 5, 4, 2];
+        $type = ['PKW', 'Traktor', 'Mähdrescher', 'Mähdrescher', 'Traktor', 'Pritsche', 'Anhänger', 'Anhänger', 'Pickup', 'Anhänger', 'Pritsche', 'Pickup', 'Traktor', 'Anhänger', 'Pritsche', 'Traktor'];
 
         $branding = ['Audi A5', 'John Deere 6230', 'Claas Tucano 420', 'Claas Lexion 620', 'Fendt',
             'Opel Movano II', 'Pongratz 1 Achs', 'Tema Tridem',

@@ -16,6 +16,7 @@ class HomeController extends Controller
             $data = Event::query()
                 ->with('customer')
                 ->with('employees')
+                ->with('vehicles')
                 ->get();
             return Inertia::render('home', [
                 'events' => $data

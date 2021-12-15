@@ -30,12 +30,12 @@ class Event extends Model
 
     public function employees()
     {
-        return $this->belongsToMany(User::class,'event_user');
+        return $this->belongsToMany(User::class,'event_user')->withTimestamps();
     }
 
     public function vehicles()
     {
-        return $this->belongsToMany(Vehicle::class,'event_vehicle');
+        return $this->belongsToMany(Vehicle::class,'event_vehicle')->withTimestamps();
     }
 
 }

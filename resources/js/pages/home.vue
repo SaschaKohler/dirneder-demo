@@ -101,11 +101,19 @@
               <p class="text-bold">
                 {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
               </p>
-              <ul>Team:
+              <div class="d-flex justify-space-around">
+              <ul><span class="text-subtitle-1 text-decoration-underline">Team:</span>
                 <li v-for="employee in selectedEvent.employees" :key="employee.id">
                   {{employee.name}}
                 </li>
               </ul>
+                <ul class="text-caption"><span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
+                <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
+                  {{vehicle.branding}}
+                </li>
+              </ul>
+              </div>
+
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -186,6 +194,8 @@ export default {
         this.selectedEvent.color = event.color
         this.selectedEvent.type = event.type
         this.selectedEvent.employees = event.employees
+        this.selectedEvent.vehicles = event.vehicles
+
         this.selectedEvent.start = (event.start).substring(10,16)
         this.selectedEvent.end = (event.end).substring(10,16)
 

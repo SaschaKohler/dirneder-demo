@@ -23,6 +23,7 @@ class VehicleController extends Controller
             ->paginate($request->page_size ?? 10);
         return Inertia::render('vehicle/index', [
             'items' => $data,
+            'count' => Vehicle::count(),
         ]);
     }
 

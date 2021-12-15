@@ -1,24 +1,38 @@
-version: '3.8'
-
+#version: '3.8'
+#
+#services:
+#    #MYSQL
+#    mysql:
+#        image: mysql/mysql-server:8.0
+#        ports:
+#            - 3306:3306
+#        environment:
+#            MYSQL_ROOT_PASSWORD: root
+#            MYSQL_USER: user
+#            MYSQL_PASSWORD: password
+#            MYSQL_ROOT_HOST: "%"
+#            MYSQL_DATABASE: 'laravel_inertia'
+#        volumes:
+#            - mysqldata:/var/lib/mysql
+#        healthcheck:
+#            test: mysqladmin ping -h 127.0.0.1 -u root --password=$MYSQL_ROOT_PASSWORD
+#            interval: 5s
+#            retries: 10
+#
+#volumes:
+#
+#    mysqldata:
+version: '3'
 services:
-    #MYSQL
-    mysql:
-        image: mysql/mysql-server:8.0
+    database:
+        image: "postgres" # use latest official postgres version
         ports:
-            - 3306:3306
+            - 5432:5432
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-            MYSQL_ROOT_HOST: "%"
-            MYSQL_DATABASE: 'laravel_inertia'
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: 'laravel_inertia' # configure postgres
         volumes:
-            - mysqldata:/var/lib/mysql
-        healthcheck:
-            test: mysqladmin ping -h 127.0.0.1 -u root --password=$MYSQL_ROOT_PASSWORD
-            interval: 5s
-            retries: 10
-
+            - postgresql-data:/var/lib/postgresql/data/ # persist data even if container shuts down
 volumes:
-
-    mysqldata:
+    postgresql-data: # named volumes can be managed easier using docker-compose

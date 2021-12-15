@@ -26,7 +26,7 @@ class EventController extends Controller
                 $query->latest();
             })
             ->when($request->search, function ($query, $value) {
-                $query->where('name', 'LIKE', '%' . $value . '%');
+                $query->where('type', 'LIKE', '%' . $value . '%');
             })
             ->with('customer')
             ->with('employees')
@@ -37,9 +37,9 @@ class EventController extends Controller
             'customers' => Customer::all(),
             'employees' => User::all(),
             'vehicles' => Vehicle::all(),
+            'count' => Event::count(),
         ]);
     }
-
 
 
     public function store(Request $request)
@@ -74,18 +74,21 @@ class EventController extends Controller
             'notes' => 'nullable',
             'employees' => 'required|array|min:1',
             'vehicles' => 'required|array|min:1',
-            // employees = users !
-            //  'employees.*' => 'numeric'
         ]);
 
         $employees = $request->employees;
         $vehicles = $request->vehicles;
 
-        if (!is_array($employees[0]) && !is_array($vehicles[0])) {
+
+        if (!is_array($employees[0])) {
             $event->employees()->sync($request->employees);
+            $event->save();
+        }
+        if (!is_array($vehicles[0])) {
             $event->vehicles()->sync($request->vehicles);
             $event->save();
         }
+
 
         $event->update($data);
 
