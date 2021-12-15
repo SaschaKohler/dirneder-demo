@@ -18,7 +18,7 @@
     <v-main>
       <v-container>
         <v-card>
-          <v-card-title class="text-center" >Dirneder - Mitarbeiter - Kunden - Fahrzeuge - Aufträge</v-card-title>
+          <v-card-title class="text-center" >Mitarbeiter - Kunden - Fahrzeuge - Aufträge</v-card-title>
         </v-card>
       </v-container>
     </v-main>
@@ -29,7 +29,7 @@
 import ApplicationLogo from '../components/ApplicationLogo.vue'
 import GuestLayout from '../layouts/GuestLayout.vue'
 export default {
-  components: { ApplicationLogo, GuestLayout },
+  components: { GuestLayout },
   computed: {
     appName() {
       return this.$page.props.appName

@@ -32,4 +32,10 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class,'event_user');
     }
+
+    public function vehicles()
+    {
+        return $this->belongsToMany(Vehicle::class,'event_vehicle');
+    }
+
 }

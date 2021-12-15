@@ -91,7 +91,7 @@ export default {
       items: [
         {icon: "mdi-apps", title: "Start", to: "home"},
         {
-          icon: "mdi-run", title: "Belegschaft", to: "employee.index",
+          icon: "mdi-run", title: "Belegschaft", to: "user.index",
           sublinks: [
             {icon: "mdi-run", title: "Mitarbeiter", to: "user.index"},
             {icon: "mdi-run", title: "Kategorien", to: "employeeCategory.index"},
@@ -99,8 +99,7 @@ export default {
         },
         {icon: "mdi-newspaper", title: "Aufträge", to: "event.index"},
         {icon: "mdi-account-multiple", title: "Kunden", to: "customer.index"},
-        {icon: "mdi-account-multiple", title: "Anhänger", to: "customer.index"},
-        {icon: "mdi-jeepney", title: "ZugFahrzeuge", to: "customer.index"},
+        {icon: "mdi-jeepney", title: "Fahrzeuge", to: "vehicle.index"},
 
       ],
       miniVariant: false,

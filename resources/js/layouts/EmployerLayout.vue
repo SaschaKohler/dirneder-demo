@@ -71,7 +71,11 @@
       <div class="d-flex align-center">
         <v-icon dark>mdi-account</v-icon>
         <div class="pl-3">
+          <Link :href="route('employer.edit', {id: user.id})"
+                class="text-decoration-underline white--text text">
+
           <span class="body-1 font-weight-medium">{{ user.name }}</span>
+          </Link>
         </div>
       </div>
     </v-app-bar>

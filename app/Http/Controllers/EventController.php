@@ -6,8 +6,10 @@ use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Carbon;
 
@@ -28,13 +30,17 @@ class EventController extends Controller
             })
             ->with('customer')
             ->with('employees')
+            ->with('vehicles')
             ->paginate($request->page_size ?? 10);
         return Inertia::render('event/index', [
             'items' => $data,
             'customers' => Customer::all(),
-            'employees' => User::all()
+            'employees' => User::all(),
+            'vehicles' => Vehicle::all(),
         ]);
     }
+
+
 
     public function store(Request $request)
     {
@@ -66,14 +72,18 @@ class EventController extends Controller
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',
-            'employees' => 'required|array|min:1',   // employees = users !
+            'employees' => 'required|array|min:1',
+            'vehicles' => 'required|array|min:1',
+            // employees = users !
             //  'employees.*' => 'numeric'
         ]);
 
         $employees = $request->employees;
+        $vehicles = $request->vehicles;
 
-        if (!is_array($employees[0])) {
+        if (!is_array($employees[0]) && !is_array($vehicles[0])) {
             $event->employees()->sync($request->employees);
+            $event->vehicles()->sync($request->vehicles);
             $event->save();
         }
 

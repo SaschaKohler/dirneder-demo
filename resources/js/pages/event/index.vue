@@ -1,4 +1,5 @@
 <template>
+
   <admin-layout>
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
@@ -47,6 +48,11 @@
       <template v-slot:item.employees="{ item }">
         <ul>
         <li v-for="item in item.employees" :key="item.id">{{item.name}}</li>
+        </ul>
+      </template>
+      <template v-slot:item.vehicles="{ item }">
+        <ul>
+          <li v-for="item in item.vehicles" :key="item.id">{{item.branding}}</li>
         </ul>
       </template>
 
@@ -143,6 +149,25 @@
             hint="Mitarbeiter auswählen"
             persistent-hint
           ></v-select>
+          <v-select
+            v-model="form.vehicles"
+            :items="vehicles"
+            item-text="branding"
+            item-value="id"
+            :menu-props="{ maxHeight: '400' }"
+            label="Fahrzeuge"
+            multiple
+            open-on-clear
+            :error-messages="form.errors.vehicles"
+            dense
+            outlined
+            clearable
+            color="brown"
+            item-color="brown"
+            class="mt-2 mb-3"
+            hint="Fahrzeuge auswählen"
+            persistent-hint
+          ></v-select>
           <v-textarea
             v-model="form.notes"
             label="Bemerkungen"
@@ -184,7 +209,7 @@
 <script>
 import AdminLayout from "../../layouts/AdminLayout.vue";
 export default {
-  props: ["items" , "customers","employees"],
+  props: ["items","customers","employees","vehicles"],
   components: { AdminLayout },
   data() {
     return {
@@ -196,6 +221,7 @@ export default {
         { text: "Leistung", value: "type" },
         { text: "Kunde", value: "customer_id" },
         { text: "Mitarbeiter", value: "employees" },
+        { text: "Fahrzeuge", value: "vehicles" },
         { text: "Angelegt", value: "created_at" },
         { text: "Actions", value: "action", sortable: false },
       ],
@@ -229,7 +255,8 @@ export default {
         color : 'dirneder',
         customer_id: null,
         notes: null,
-        employees: null
+        employees: null,
+        vehicles:null,
       }),
     };
   },
@@ -255,11 +282,6 @@ export default {
       this.params.search = val;
       this.updateData();
     },
-    dialog(visible){
-      if(visible) {
-      } else {
-      }
-    }
   },
   methods: {
     setEmployees() {
@@ -299,6 +321,7 @@ export default {
       this.form.customer_id = item.customer_id;
       this.form.notes = item.notes;
       this.form.employees = item.employees;
+      this.form.vehicles = item.vehicles;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;

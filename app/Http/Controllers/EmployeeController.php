@@ -2,68 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use App\Models\EmployeeCategory;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Employee::when($request->sort_by, function ($query, $value) {
-                $query->orderBy($value, request('order_by', 'asc'));
-            })
-            ->when(!isset($request->sort_by), function ($query) {
-                $query->latest();
-            })
-            ->when($request->search, function ($query, $value) {
-                $query->where('name', 'LIKE', '%'.$value.'%');
-            })
-            ->with('category')
-            ->paginate($request->page_size ?? 10);
-        return Inertia::render('employee/index', [
-            'items' => $data,
-            'categories' => EmployeeCategory::all()
+        $data = Event::query()->whereHas('employees', function($query) {
+            $query->where('user_id','=', Auth::id());
+        })
+            ->with('customer')
+            ->with('employees')
+            ->get();
+        return Inertia::render('employer', [
+            'events' => $data
         ]);
     }
 
-    public function store(Request $request)
+    public function edit($id)
     {
-        $data = $this->validate($request, [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'address' => 'required|string',
-            'category_id' => 'required|integer'
+        return Inertia::render('employer/edit', [
+            'user' => User::findOrFail($id)
         ]);
-        Employee::create($data);
-        return redirect()->back()->with('message', [
-            'type' => 'success',
-            'text' => 'Datensatz erstellt!',
-        ]);
+
+
     }
 
-    public function update(Employee $employee, Request $request)
+    public function update(Request $request, $id)
     {
+
+        $user = User::find($id);
+
         $data = $this->validate($request, [
             'name' => 'required|string',
             'email' => 'required|email',
+            'phone1' => 'required|string',
+            'phone2' => 'sometimes|nullable',
             'address' => 'required|string',
-            'category_id' => 'required|integer'
+            'password' => 'sometimes|nullable',
+            'mon' => 'nullable',
+            'tue' => 'nullable',
+            'wed' => 'nullable',
+            'thu' => 'nullable',
+            'fri' => 'nullable',
         ]);
-        $employee->update($data);
+       $user->update($data);
+
         return redirect()->back()->with('message', [
             'type' => 'success',
             'text' => 'Datensatz geändert!',
         ]);
     }
 
-    public function destroy(Employee $employee)
-    {
-        $employee->delete();
-        return redirect()->back()->with('message', [
-            'type' => 'success',
-            'text' => 'Datensatz gelöscht!',
-        ]);
-    }
+
 }

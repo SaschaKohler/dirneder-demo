@@ -13,7 +13,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        if(Auth::check() && Auth::user()->role === 1) {
             $data = Event::query()
                 ->with('customer')
                 ->with('employees')
@@ -21,18 +20,6 @@ class HomeController extends Controller
             return Inertia::render('home', [
                 'events' => $data
             ]);
-        } else {
-
-            $data = Event::query()->whereHas('employees', function($query) {
-                $query->where('user_id','=', Auth::id());
-            })
-                ->with('customer')
-                ->with('employees')
-                ->get();
-            return Inertia::render('employer', [
-                'events' => $data
-            ]);
-        }
 
     }
 }
