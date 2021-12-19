@@ -17,6 +17,7 @@ class EmployeeController extends Controller
         })
             ->with('customer')
             ->with('employees')
+            ->with('vehicles')
             ->get();
         return Inertia::render('employer', [
             'events' => $data

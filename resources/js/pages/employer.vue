@@ -91,7 +91,7 @@
               <div class="flex-grow-1"></div>
             </v-toolbar>
             <v-card-text>
-              <p class="text-lg-subtitle-2">{{ selectedEvent.start }} - {{ selectedEvent.end}}</p>
+              <p class="text-lg-subtitle-2">{{ selectedEvent.start }}</p>
               <p class="text-h5">
                 {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
               </p>
@@ -101,11 +101,19 @@
               <p class="text-bold">
                 {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
               </p>
-              <ul>Team:
-                <li v-for="employee in selectedEvent.employees" :key="employee.id">
-                  {{employee.name}}
-                </li>
-              </ul>
+              <div class="d-flex justify-space-around">
+                <ul><span class="text-subtitle-1 text-decoration-underline">Team:</span>
+                  <li v-for="employee in selectedEvent.employees" :key="employee.id">
+                    {{employee.name}}
+                  </li>
+                </ul>
+                <ul>
+                  <span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
+                  <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
+                    {{vehicle.branding}}
+                  </li>
+                </ul>
+              </div>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -186,8 +194,10 @@ export default {
         this.selectedEvent.color = event.color
         this.selectedEvent.type = event.type
         this.selectedEvent.employees = event.employees
-        this.selectedEvent.start = (event.start).substring(10,16)
-        this.selectedEvent.end = (event.end).substring(10,16)
+        this.selectedEvent.vehicles = event.vehicles
+
+        this.selectedEvent.start = (event.start)
+        this.selectedEvent.end = (event.end)
 
         this.selectedEvent.customer.lastName = event.customer.lastName
         this.selectedEvent.customer.firstName = event.customer.firstName

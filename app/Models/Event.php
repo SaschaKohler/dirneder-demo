@@ -14,13 +14,9 @@ class Event extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+//        'planned' => 'datetime: d.M.Y'
 
     ];
-
-//    public function getCreatedAtAttribute($value)
-//    {
-//        return Carbon::parse($value)->format('d M y');
-//    }
 
 
     public function customer()

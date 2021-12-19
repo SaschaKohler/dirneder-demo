@@ -12,13 +12,12 @@ class Customer extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'created_at' => 'datetime:d.m.y'
+    ];
 
 
 
-    public function getCreatedAtAttribute($value)
-    {
-        return Carbon::parse($value)->format('H:i, d M Y');
-    }
 
     public function events()
     {

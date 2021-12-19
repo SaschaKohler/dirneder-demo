@@ -139,7 +139,6 @@ export default {
         { text: "Kategorie", value: "category_id" },
         { text: "admin", value: "role" },
         { text: "aktiv", value: "isActive" },
-        { text: "Angelegt", value: "created_at" },
         { text: "Actions", value: "action", sortable: false },
       ],
       breadcrumbs: [

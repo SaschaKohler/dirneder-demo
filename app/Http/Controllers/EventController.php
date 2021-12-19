@@ -52,10 +52,17 @@ class EventController extends Controller
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',
-            'employees' => 'required'
+            'employees' => 'required|array|min:1',
+            'vehicles' => 'required|array|min:1',
         ]);
 
-        Event::create($data);
+
+        $event = Event::create($data);
+        $event->employees()->sync($request->employees);
+        $event->vehicles()->sync($request->vehicles);
+        $event->save();
+
+
         return redirect()->back()->with('message', [
             'type' => 'success',
             'text' => 'Datensatz erstellt!',
@@ -78,6 +85,57 @@ class EventController extends Controller
 
         $employees = $request->employees;
         $vehicles = $request->vehicles;
+//        $plannedDate = Carbon::createFromFormat('Y-m-d H:i:s', $data['planned'])->format('d-m-Y');
+//        $currentEventId = $event;
+//        $currentEventId->toArray()['id'];
+//
+//        $warning = false;
+//
+//        foreach ($vehicles as $vehicle) {
+//
+//            $event = Event::whereHas('vehicles', function ($query) use ($vehicle) {
+//                return $query->where('vehicle_id', '=', $vehicle);
+//            })->where('id', '<>', $currentEventId)->get()->toArray();
+//
+//            if ($event) {
+//                $vehicle = Vehicle::find($vehicle)->toArray();
+//                // $vehicle_array = array();
+//                $eventPlanned = Carbon::createFromFormat('Y-m-d H:i ', $event[0]['planned'])->format('d-m-Y');
+//                if ($plannedDate == $eventPlanned) {
+//                    $warning = true;
+//                    $vehicle_array[] = $vehicle;
+//
+//                }
+//            }
+//        }
+//
+//        if ($warning) {
+//
+//
+//            return redirect()->back()->with('message', [
+//                'type' => 'error',
+//                'text' => $vehicle_array . 'in verwendung '
+//            ]);
+//        }
+
+
+//
+//        foreach ($employees as $employer){
+//
+//            $event = Event::whereHas('employees' , function($query) use ($employer) {
+//                return $query->where('user_id' , '=' , $employer );
+//            })->get()->toArray();
+//
+//            $employerInUse = User::find($employer)->toArray();
+//
+//            $eventStart = Carbon::createFromFormat('Y-m-d H:i:s',$event[0]['start'] )->format('d-m-Y');
+//            if(($startDate >= $eventStart) || ($startDate <= $endDate)){
+//                return redirect()->back()->with('message', [
+//                    'type' => 'error',
+//                    'text' =>  $employerInUse['name'] . ' bereits für '. $eventStart .' gebucht',
+//                ]);
+//            }
+//        }
 
 
         if (!is_array($employees[0])) {

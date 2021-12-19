@@ -37,12 +37,6 @@
       <template #[`item.index`]="{ index }">
         {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
       </template>
-      <template v-slot:item.start="{ item }">
-        <span>{{ (item.start).substring(0, 10) }}</span>
-      </template>
-      <template v-slot:item.end="{ item }">
-        <span>{{ (item.end).substring(0, 10) }}</span>
-      </template>
       <template v-slot:item.customer_id="{ item }">
         {{ item.customer.lastName }}
       </template>
@@ -59,10 +53,11 @@
 
       <template #[`item.action`]="{ item }">
         <v-btn x-small color="yellow lighten-2" @click="editItem(item)">
-          <v-icon small> mdi-pencil</v-icon>
+        <v-icon small> mdi-pencil</v-icon>
         </v-btn>
         <v-btn x-small color="red lighten-2" dark @click="deleteItem(item)">
           <v-icon small> mdi-delete</v-icon>
+
         </v-btn>
       </template>
     </v-data-table>
@@ -79,43 +74,100 @@
             color="brown"
             :error-messages="form.errors.name"
             type="text"
-            outlined
             dense
           />
-          <v-select
-            v-model="form.color"
-            :items="colors"
-            item-text="title"
-            item-value="id"
-            label="Farbe"
-            color="brown"
-            outlined
-            dense
-          ></v-select>
 
-          <VueCtkDateTimePicker
-            v-model="form.start"
-            label="Beginn"
-            color="#388E3C"
-            format="YYYY-MM-DD HH:mm"
-            class="mb-5"
-            locale="de"
-            output-format="YYYY-MM-DD HH:mm"
-            :no-button-now=true
-            button-color="#388E3C"
-          />
-          <VueCtkDateTimePicker
-            v-model="form.end"
-            label="Ende"
-            color="#388E3C"
-            format="YYYY-MM-DD HH:mm"
-            locale="de"
-            class="mb-5"
-            :no-button-now=true
-            button-color="#388E3C"
-          />
-          <v-text-field
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="form.start"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="dateFormattedStart"
+                label="Start"
+                prepend-icon="mdi-calendar"
+                readonly
+                densed
+                outlined
+                v-on="on"
+                color="dirneder"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.start"
+              no-title
+              scrollable
+              locale="de"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="error"
+                @click="menu = false"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                text
+                color="dirneder"
+                @click="$refs.menu.save(form.start)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-menu
+            ref="menu1"
+            v-model="menu1"
+            :close-on-content-click="false"
+            :return-value.sync="form.end"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="dateFormattedEnd"
+                label="Ende"
+                prepend-icon="mdi-calendar"
+                readonly
+                densed
+                outlined
+                v-on="on"
+                color="dirneder"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.end"
+              no-title
+              scrollable
+              locale="de"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="error"
+                @click="menu1 = false"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                text
+                color="dirneder"
+                @click="$refs.menu1.save(form.end)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-select
             v-model="form.type"
+            :items="specials"
             label="Leistung"
             :error-messages="form.errors.type"
             color="brown"
@@ -213,21 +265,22 @@
 
 <script>
 import AdminLayout from "../../layouts/AdminLayout.vue";
+import {format, parseISO} from 'date-fns'
 
 export default {
-  props: ["items", "customers", "employees", "vehicles","count"],
+  props: ["items", "customers", "employees", "vehicles", "count"],
   components: {AdminLayout},
   data() {
     return {
       headers: [
         {text: "No", value: "index", sortable: false},
         {text: "Bezeichner", value: "name"},
-        {text: "Beginn", value: "start"},
+        {text: "Start", value: "start"},
         {text: "Ende", value: "end"},
         {text: "Leistung", value: "type"},
         {text: "Kunde", value: "customer_id"},
-        {text: "Mitarbeiter", value: "employees"},
-        {text: "Fahrzeuge", value: "vehicles"},
+        {text: "Mitarbeiter", value: "employees", sortable: false},
+        {text: "Fahrzeuge", value: "vehicles", sortable: false},
         {text: "Actions", value: "action", sortable: false},
       ],
       breadcrumbs: [
@@ -242,6 +295,8 @@ export default {
           href: "/event",
         },
       ],
+      menu: false,
+      menu1: false,
       dialog: false,
       dialogDelete: false,
       isUpdate: false,
@@ -251,7 +306,8 @@ export default {
       options: {},
       search: null,
       params: {},
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
+      specials: ['pers. Termin', 'Gartenpflege', 'Baumpflege', 'Zaunbau', 'Transport', 'Winterdienst', 'Instandsetzung'],
+      colors: ['red', 'green', 'green', 'brown', 'blue', 'grey', 'orange'],
       form: this.$inertia.form({
         name: null,
         start: null,
@@ -269,16 +325,46 @@ export default {
     formTitle() {
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
     },
+    computedColor() {
+      console.log(this.form.type);
+
+      switch (this.form.type) {
+        case 'pers. Termin':
+          return this.colors[0];
+
+        case 'Gartenpflege':
+          return this.colors[1];
+        case 'Baumflege':
+          return this.colors[2];
+        case 'Zaunbau':
+          return this.colors[3];
+        case 'Transport':
+          return this.colors[4];
+        case 'Winterdienst':
+          return this.colors[5];
+        case 'Instandsetzung':
+          return this.colors[6];
+        default:
+          return 'brown';
+      }
+    },
+    dateFormattedStart() {
+      return this.form.start ? format(parseISO(this.form.start), 'dd\.MM\.yyyy') : ''
+    },
+    dateFormattedEnd() {
+      return this.form.end ? format(parseISO(this.form.end), 'dd\.MM\.yyyy') : ''
+    },
+
   },
   watch: {
     options: function (val) {
       this.params.page = val.page;
-      if(val.itemsPerPage === -1) { // get page_size 'All' (-1)
+      if (val.itemsPerPage === -1) { // get page_size 'All' (-1)
         this.params.page_size = this.$props.count;
-      }
-      else {
+      } else {
         this.params.page_size = val.itemsPerPage
-      }   if (val.sortBy.length != 0) {
+      }
+      if (val.sortBy.length != 0) {
         this.params.sort_by = val.sortBy[0];
         this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
       } else {
@@ -314,6 +400,7 @@ export default {
       this.form.start = item.start;
       this.form.end = item.end;
       this.form.type = item.type;
+      this.form.color = this.computedColor;
       this.form.customer_id = item.customer_id;
       this.form.notes = item.notes;
       this.form.employees = item.employees;

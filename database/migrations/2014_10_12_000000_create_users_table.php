@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone1')->default('-');
             $table->string('phone2')->nullable()->default('-');
             $table->string('address')->default('-');
-            $table->boolean('mon')->nullable()->default(true);
+            $table->boolean('mon')->nullable()->default(false);
             $table->boolean('tue')->nullable()->default(false);
             $table->boolean('wed')->nullable()->default(false);
             $table->boolean('thu')->nullable()->default(false);

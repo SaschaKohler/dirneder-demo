@@ -61,7 +61,6 @@
           :weekdays="weekday"
           :type="type"
           :events="events"
-          :event-category="events.type"
           :event-overlap-mode="mode"
           :event-overlap-threshold="30"
           :event-color="events.color"
@@ -91,8 +90,14 @@
               <div class="flex-grow-1"></div>
             </v-toolbar>
             <v-card-text>
-              <p class="text-lg-subtitle-2">{{ selectedEvent.start }} - {{ selectedEvent.end}}</p>
-                <p class="text-h5">
+              <p class="text-lg-subtitle-2">{{ selectedEvent.start }} </p>
+              <Link :href="route('event.index', {id: selectedEvent.id})"
+                    class="text-decoration-underline ">
+
+                <span class="body-1 font-weight-medium">{{ selectedEvent.name }}</span>
+              </Link>
+
+              <p class="text-h5">
                   {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
                 </p>
               <p class="text-caption">
@@ -107,7 +112,8 @@
                   {{employee.name}}
                 </li>
               </ul>
-                <ul class="text-caption"><span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
+                <ul>
+                  <span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
                 <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
                   {{vehicle.branding}}
                 </li>
@@ -196,8 +202,9 @@ export default {
         this.selectedEvent.employees = event.employees
         this.selectedEvent.vehicles = event.vehicles
 
-        this.selectedEvent.start = (event.start).substring(10,16)
-        this.selectedEvent.end = (event.end).substring(10,16)
+        this.selectedEvent.start = event.start
+        this.selectedEvent.end = event.end
+        this.selectedEvent.name = event.name
 
         this.selectedEvent.customer.lastName = event.customer.lastName
         this.selectedEvent.customer.firstName = event.customer.firstName
