@@ -8,6 +8,9 @@ use App\Http\Controllers\HelloController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,11 +29,26 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('/');
 
-Route::get('home', [HomeController::class, 'index'])->name('home');
-Route::resource('event', EventController::class)->only(['index','store','update','destroy']);
-Route::resource('employeeCategory', EmployeeCategoryController::class)->only(['index','store','update','destroy']);
 
-Route::resource('customer',CustomerController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('employee', EmployeeController::class)->only(['index', 'store', 'update', 'destroy']);
+require __DIR__ . '/auth.php';
 
-require __DIR__.'/auth.php';
+
+Route::group(['middleware' => 'auth'], function () {
+
+   Route::resource('employer', EmployeeController::class);
+
+
+    Route::group(['middleware' => 'adminAuthenticated'], function () {
+
+        Route::get('home', [HomeController::class, 'index'])->name('home');
+
+        Route::resource('event', EventController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('vehicle', VehicleController::class)->only(['index']);
+        Route::resource('user', UserController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('employeeCategory', EmployeeCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+
+        Route::resource('customer', CustomerController::class)->only(['index', 'store', 'update', 'destroy']);
+    });
+});
+
+

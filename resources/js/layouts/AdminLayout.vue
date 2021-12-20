@@ -19,7 +19,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
+              <v-list-item-title v-text="item.title"/>
             </v-list-item-content>
           </v-list-item>
 
@@ -28,20 +28,21 @@
             no-action
             color="dirneder"
           >
-              <template v-slot:activator color="brown">
-                <v-list-item-action>
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.title"/>
-                </v-list-item-content>
-              </template>
+            <template v-slot:activator color="brown">
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"/>
+              </v-list-item-content>
+            </template>
             <v-list-item
               v-for="(item, i) in item.sublinks"
               :key="i"
-              @click="goToPage(item.to)">
+              @click="goToPage(item.to)"
+            >
               <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
+                <v-list-item-title v-text="item.title"/>
               </v-list-item-content>
             </v-list-item>
 
@@ -64,9 +65,9 @@
         v-if="$vuetify.breakpoint.smAndDown"
         @click.stop="drawer = !drawer"
       />
-      <v-app-bar-nav-icon v-else @click.stop="miniVariant = !miniVariant" />
-      <v-toolbar-title v-text="appName" />
-      <v-spacer />
+      <v-app-bar-nav-icon v-else @click.stop="miniVariant = !miniVariant"/>
+      <v-toolbar-title v-text="appName"/>
+      <v-spacer/>
       <div class="d-flex align-center">
         <v-icon dark>mdi-account</v-icon>
         <div class="pl-3">
@@ -76,32 +77,29 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <slot />
+        <slot/>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import ApplicationLogo from "../components/ApplicationLogo.vue";
 export default {
-  components: { ApplicationLogo },
   data() {
     return {
       drawer: !this.$vuetify.breakpoint.smAndDown,
       items: [
-        { icon: "mdi-apps", title: "Start", to: "home" },
-        { icon: "mdi-run", title: "Belegschaft", to: "employee.index",
-          sublinks : [
-            { icon: "mdi-run", title: "Mitarbeiter", to: "employee.index"},
+        {icon: "mdi-apps", title: "Start", to: "home"},
+        {
+          icon: "mdi-run", title: "Belegschaft", to: "user.index",
+          sublinks: [
+            {icon: "mdi-run", title: "Mitarbeiter", to: "user.index"},
             {icon: "mdi-run", title: "Kategorien", to: "employeeCategory.index"},
-
           ]
         },
-        { icon: "mdi-account-multiple", title: "Kunden", to: "customer.index" },
-        { icon: "mdi-newspaper", title: "Aufträge", to: "event.index" },
-        { icon: "mdi-account-multiple", title: "Anhänger", to: "customer.index" },
-        { icon: "mdi-jeepney", title: "ZugFahrzeuge", to: "customer.index" },
+        {icon: "mdi-newspaper", title: "Aufträge", to: "event.index"},
+        {icon: "mdi-account-multiple", title: "Kunden", to: "customer.index"},
+        {icon: "mdi-jeepney", title: "Fahrzeuge", to: "vehicle.index"},
 
       ],
       miniVariant: false,

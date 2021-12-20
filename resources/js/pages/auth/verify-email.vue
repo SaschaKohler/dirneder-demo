@@ -7,7 +7,6 @@
             <v-card>
               <v-card-title class="d-flex align-center justify-center">
                 <Link :href="route('/')">
-                  <application-logo style="height: 75" />
                 </Link>
               </v-card-title>
               <v-card-text>

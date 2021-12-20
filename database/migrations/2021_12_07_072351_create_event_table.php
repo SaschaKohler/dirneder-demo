@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 
 class CreateEventTable extends Migration
@@ -17,8 +18,10 @@ class CreateEventTable extends Migration
 
             $table->id();
             $table->string('name');
-            $table->dateTime('start')->default(\Illuminate\Support\Carbon::now());
-            $table->dateTime('end')->default(\Illuminate\Support\Carbon::tomorrow());
+            $table->date('start')->default(Carbon::now());
+            $table->date('end')->default(Carbon::tomorrow());
+            $table->time('startTime')->default(Carbon::now());
+            $table->time('endTime')->nullable()->default(null);
             $table->string('color');
             $table->string('type');
             $table->foreignId('customer_id');

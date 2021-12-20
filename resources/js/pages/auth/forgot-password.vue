@@ -33,6 +33,7 @@
                     type="email"
                     outlined
                     dense
+                    color="dirneder"
                     :error-messages="form.errors.email"
                   />
                   <v-btn :loading="form.processing" type="submit" block color="dirneder" class="mt-3 white--text"

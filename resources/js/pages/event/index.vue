@@ -1,9 +1,10 @@
 <template>
+
   <admin-layout>
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
         <h5 class="text-h5 font-weight-bold">Aufträge</h5>
-        <v-breadcrumbs :items="breadcrumbs"  color="brown--text" class="pa-0"></v-breadcrumbs>
+        <v-breadcrumbs :items="breadcrumbs" color="brown--text" class="pa-0"></v-breadcrumbs>
       </div>
     </v-banner>
     <div class="d-flex flex-wrap align-center">
@@ -19,9 +20,10 @@
         solo
         style="max-width: 300px"
       />
-      <v-spacer />
+      <v-spacer/>
       <v-btn color="brown lighten-4 brown--text" @click="create">
-        <v-icon dark left> mdi-plus </v-icon> Neu
+        <v-icon dark left> mdi-plus</v-icon>
+        Neu
       </v-btn>
     </div>
     <v-data-table
@@ -35,27 +37,27 @@
       <template #[`item.index`]="{ index }">
         {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
       </template>
-      <template v-slot:item.start="{ item }">
-        <span>{{ new Date(item.start).toLocaleString() }}</span>
-      </template>
-      <template v-slot:item.end="{ item }">
-        <span>{{ new Date(item.end).toLocaleString() }}</span>
-      </template>
       <template v-slot:item.customer_id="{ item }">
-        {{ item.customer.lastName}}
+        {{ item.customer.lastName }}
       </template>
       <template v-slot:item.employees="{ item }">
         <ul>
-        <li v-for="item in item.employees" :key="item.id">{{item.name}}</li>
+          <li v-for="item in item.employees" :key="item.id">{{ item.name }}</li>
+        </ul>
+      </template>
+      <template v-slot:item.vehicles="{ item }">
+        <ul>
+          <li v-for="item in item.vehicles" :key="item.id">{{ item.branding }}</li>
         </ul>
       </template>
 
       <template #[`item.action`]="{ item }">
         <v-btn x-small color="yellow lighten-2" @click="editItem(item)">
-          <v-icon small> mdi-pencil </v-icon>
+        <v-icon small> mdi-pencil</v-icon>
         </v-btn>
         <v-btn x-small color="red lighten-2" dark @click="deleteItem(item)">
-          <v-icon small> mdi-delete </v-icon>
+          <v-icon small> mdi-delete</v-icon>
+
         </v-btn>
       </template>
     </v-data-table>
@@ -63,7 +65,8 @@
       <v-card>
         <v-toolbar dense dark color="dirneder" class="text-h6">{{
             formTitle
-          }}</v-toolbar>
+          }}
+        </v-toolbar>
         <v-card-text class="pt-4">
           <v-text-field
             v-model="form.name"
@@ -71,43 +74,100 @@
             color="brown"
             :error-messages="form.errors.name"
             type="text"
-            outlined
             dense
           />
-          <v-select
-            v-model="form.color"
-            :items="colors"
-            item-text="title"
-            item-value="id"
-            label="Farbe"
-            color="brown"
-            outlined
-            dense
-          ></v-select>
 
-          <VueCtkDateTimePicker
-            v-model="form.start"
-            label="Beginn"
-            color="#388E3C"
-            format="YYYY-MM-DD HH:mm"
-            class="mb-5"
-            locale="de"
-            output-format="YYYY-MM-DD HH:mm"
-            :no-button-now=true
-            button-color="#388E3C"
-          />
-          <VueCtkDateTimePicker
-            v-model="form.end"
-            label="Ende"
-            color="#388E3C"
-            format="YYYY-MM-DD HH:mm"
-            locale="de"
-            class="mb-5"
-            :no-button-now=true
-            button-color="#388E3C"
-          />
-          <v-text-field
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="form.start"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="dateFormattedStart"
+                label="Start"
+                prepend-icon="mdi-calendar"
+                readonly
+                densed
+                outlined
+                v-on="on"
+                color="dirneder"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.start"
+              no-title
+              scrollable
+              locale="de"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="error"
+                @click="menu = false"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                text
+                color="dirneder"
+                @click="$refs.menu.save(form.start)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-menu
+            ref="menu1"
+            v-model="menu1"
+            :close-on-content-click="false"
+            :return-value.sync="form.end"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="dateFormattedEnd"
+                label="Ende"
+                prepend-icon="mdi-calendar"
+                readonly
+                densed
+                outlined
+                v-on="on"
+                color="dirneder"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.end"
+              no-title
+              scrollable
+              locale="de"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="error"
+                @click="menu1 = false"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                text
+                color="dirneder"
+                @click="$refs.menu1.save(form.end)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+          <v-select
             v-model="form.type"
+            :items="specials"
             label="Leistung"
             :error-messages="form.errors.type"
             color="brown"
@@ -143,6 +203,25 @@
             hint="Mitarbeiter auswählen"
             persistent-hint
           ></v-select>
+          <v-select
+            v-model="form.vehicles"
+            :items="vehicles"
+            item-text="branding"
+            item-value="id"
+            :menu-props="{ maxHeight: '400' }"
+            label="Fahrzeuge"
+            multiple
+            open-on-clear
+            :error-messages="form.errors.vehicles"
+            dense
+            outlined
+            clearable
+            color="brown"
+            item-color="brown"
+            class="mt-2 mb-3"
+            hint="Fahrzeuge auswählen"
+            persistent-hint
+          ></v-select>
           <v-textarea
             v-model="form.notes"
             label="Bemerkungen"
@@ -156,9 +235,10 @@
         </v-card-text>
         <v-card-actions>
           <v-btn :disabled="form.processing" text color="error" @click="dialog = false">Abbrechen</v-btn>
-          <v-spacer />
+          <v-spacer/>
           <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
-          >Speichern</v-btn
+          >Speichern
+          </v-btn
           >
         </v-card-actions>
       </v-card>
@@ -166,13 +246,15 @@
     <v-dialog v-model="dialogDelete" max-width="500">
       <v-card>
         <v-toolbar dense dark color="dirneder" class="text-h6"
-        >Datensatz löschen</v-toolbar
+        >Datensatz löschen
+        </v-toolbar
         >
         <v-card-text class="text-h6"
-        >Löschen bestätigen ?</v-card-text
+        >Löschen bestätigen ?
+        </v-card-text
         >
         <v-card-actions>
-          <v-spacer />
+          <v-spacer/>
           <v-btn :disabled="form.processing" text color="error" @click="dialogDelete = false">Abbruch</v-btn>
           <v-btn :loading="form.processing" text color="dirneder" @click="destroy">Ja</v-btn>
         </v-card-actions>
@@ -183,21 +265,23 @@
 
 <script>
 import AdminLayout from "../../layouts/AdminLayout.vue";
+import {format, parseISO} from 'date-fns'
+
 export default {
-  props: ["items" , "customers","employees"],
-  components: { AdminLayout },
+  props: ["items", "customers", "employees", "vehicles", "count"],
+  components: {AdminLayout},
   data() {
     return {
       headers: [
-        { text: "No", value: "index", sortable: false },
-        { text: "Bezeichner", value: "name" },
-        { text: "Beginn", value: "start" },
-        { text: "Ende", value: "end" },
-        { text: "Leistung", value: "type" },
-        { text: "Kunde", value: "customer_id" },
-        { text: "Mitarbeiter", value: "employees" },
-        { text: "Angelegt", value: "created_at" },
-        { text: "Actions", value: "action", sortable: false },
+        {text: "No", value: "index", sortable: false},
+        {text: "Bezeichner", value: "name"},
+        {text: "Start", value: "start"},
+        {text: "Ende", value: "end"},
+        {text: "Leistung", value: "type"},
+        {text: "Kunde", value: "customer_id"},
+        {text: "Mitarbeiter", value: "employees", sortable: false},
+        {text: "Fahrzeuge", value: "vehicles", sortable: false},
+        {text: "Actions", value: "action", sortable: false},
       ],
       breadcrumbs: [
         {
@@ -211,6 +295,8 @@ export default {
           href: "/event",
         },
       ],
+      menu: false,
+      menu1: false,
       dialog: false,
       dialogDelete: false,
       isUpdate: false,
@@ -220,16 +306,18 @@ export default {
       options: {},
       search: null,
       params: {},
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
+      specials: ['pers. Termin', 'Gartenpflege', 'Baumpflege', 'Zaunbau', 'Transport', 'Winterdienst', 'Instandsetzung'],
+      colors: ['red', 'green', 'green', 'brown', 'blue', 'grey', 'orange'],
       form: this.$inertia.form({
         name: null,
         start: null,
         end: null,
         type: null,
-        color : 'dirneder',
+        color: 'dirneder',
         customer_id: null,
         notes: null,
-        employees: null
+        employees: null,
+        vehicles: null,
       }),
     };
   },
@@ -237,11 +325,45 @@ export default {
     formTitle() {
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
     },
+    computedColor() {
+      console.log(this.form.type);
+
+      switch (this.form.type) {
+        case 'pers. Termin':
+          return this.colors[0];
+
+        case 'Gartenpflege':
+          return this.colors[1];
+        case 'Baumflege':
+          return this.colors[2];
+        case 'Zaunbau':
+          return this.colors[3];
+        case 'Transport':
+          return this.colors[4];
+        case 'Winterdienst':
+          return this.colors[5];
+        case 'Instandsetzung':
+          return this.colors[6];
+        default:
+          return 'brown';
+      }
+    },
+    dateFormattedStart() {
+      return this.form.start ? format(parseISO(this.form.start), 'dd\.MM\.yyyy') : ''
+    },
+    dateFormattedEnd() {
+      return this.form.end ? format(parseISO(this.form.end), 'dd\.MM\.yyyy') : ''
+    },
+
   },
   watch: {
     options: function (val) {
       this.params.page = val.page;
-      this.params.page_size = val.itemsPerPage;
+      if (val.itemsPerPage === -1) { // get page_size 'All' (-1)
+        this.params.page_size = this.$props.count;
+      } else {
+        this.params.page_size = val.itemsPerPage
+      }
       if (val.sortBy.length != 0) {
         this.params.sort_by = val.sortBy[0];
         this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
@@ -255,26 +377,8 @@ export default {
       this.params.search = val;
       this.updateData();
     },
-    dialog(visible){
-      if(visible) {
-      } else {
-      }
-    }
   },
   methods: {
-    setEmployees() {
-      if (!_.isEmpty(this.items[this.items.employees])) {
-        const items = [];
-        _.values(this.items[this.$props.employees]).forEach(value => {
-          items.push({
-            text: value.name,
-            value: value.id,
-          });
-        });
-
-        this.form.employees = items;
-      }
-    },
     updateData() {
       this.isLoadingTable = true
       this.$inertia.get("/event", this.params, {
@@ -296,9 +400,11 @@ export default {
       this.form.start = item.start;
       this.form.end = item.end;
       this.form.type = item.type;
+      this.form.color = this.computedColor;
       this.form.customer_id = item.customer_id;
       this.form.notes = item.notes;
       this.form.employees = item.employees;
+      this.form.vehicles = item.vehicles;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;
@@ -340,8 +446,6 @@ export default {
       }
     },
   },
-  mounted() {
-    this.setEmployees()
-  }
+
 };
 </script>

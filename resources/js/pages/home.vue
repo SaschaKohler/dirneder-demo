@@ -41,6 +41,9 @@
           label="Wochentage"
           class="ma-2"
         ></v-select>
+        <v-toolbar-title class="pt-3 pl-3" v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           icon
@@ -58,12 +61,77 @@
           :weekdays="weekday"
           :type="type"
           :events="events"
-          :event-category="events.type"
           :event-overlap-mode="mode"
           :event-overlap-threshold="30"
           :event-color="events.color"
           @click:date="viewDay"
-        ></v-calendar>
+          @click:event="showEvent"
+        >
+          <template v-slot:event="{ event }">
+            <p class="text-caption">{{event.type}}/{{ event.customer.lastName}}</p>
+          </template>
+        </v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card
+            color="grey lighten-4"
+            min-width="350px"
+            flat
+          >
+            <v-toolbar
+              :color="selectedEvent.color"
+              dark
+            >
+              <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
+              <div class="flex-grow-1"></div>
+            </v-toolbar>
+            <v-card-text>
+              <p class="text-lg-subtitle-2">{{ selectedEvent.start }} </p>
+              <Link :href="route('event.index', {id: selectedEvent.id})"
+                    class="text-decoration-underline ">
+
+                <span class="body-1 font-weight-medium">{{ selectedEvent.name }}</span>
+              </Link>
+
+              <p class="text-h5">
+                  {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
+                </p>
+              <p class="text-caption">
+                {{selectedEvent.customer.street}}
+              </p>
+              <p class="text-bold">
+                {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
+              </p>
+              <div class="d-flex justify-space-around">
+              <ul><span class="text-subtitle-1 text-decoration-underline">Team:</span>
+                <li v-for="employee in selectedEvent.employees" :key="employee.id">
+                  {{employee.name}}
+                </li>
+              </ul>
+                <ul>
+                  <span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
+                <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
+                  {{vehicle.branding}}
+                </li>
+              </ul>
+              </div>
+
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="secondary"
+                @click="selectedOpen = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
       </v-sheet>
     </div>
   </admin-layout>
@@ -76,6 +144,22 @@ export default {
   components: {AdminLayout},
   props: ["events"],
   data: () => ({
+    selectedEvent: {
+      id:null,
+      start:null,
+      end:null,
+      customer: {
+        firstName:null,
+        lastName:null,
+        PLZ:null,
+        street:null,
+        city:null,
+      },
+      color:null,
+    },
+
+    selectedElement: null,
+    selectedOpen: false,
     breadcrumbs: [
       {
         text: "App",
@@ -110,6 +194,34 @@ export default {
     viewDay ({ date }) {
       this.focus = date
       this.type = 'day'
+    },
+    showEvent ({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent.color = event.color
+        this.selectedEvent.type = event.type
+        this.selectedEvent.employees = event.employees
+        this.selectedEvent.vehicles = event.vehicles
+
+        this.selectedEvent.start = event.start
+        this.selectedEvent.end = event.end
+        this.selectedEvent.name = event.name
+
+        this.selectedEvent.customer.lastName = event.customer.lastName
+        this.selectedEvent.customer.firstName = event.customer.firstName
+        this.selectedEvent.customer.street = event.customer.street
+        this.selectedEvent.customer.PLZ = event.customer.PLZ
+        this.selectedEvent.customer.city = event.customer.city
+
+        this.selectedElement = nativeEvent.target
+        setTimeout(() => this.selectedOpen = true, 10)
+      }
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        setTimeout(open, 10)
+      } else {
+        open()
+      }
+      nativeEvent.stopPropagation()
     },
   }
 

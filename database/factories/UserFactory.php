@@ -15,6 +15,7 @@ class UserFactory extends Factory
      */
     protected $model = User::class;
 
+    protected $counter = 0;
     /**
      * Define the model's default state.
      *
@@ -22,14 +23,56 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+
+        $users = ['Dirneder, Karl','Brunner, Gerald', 'Freinhofer,Martin','Holzer, Emanuel','Lettner, Birgit',
+                  'Moser, Philip','Ortmayr Stephan','Pühringer, Johann','Steinkellner, Günther','Pointer, Rudi',
+                  'Steinbauer, Karl','Kohler, Sascha','Strasser, Franz','Schwaiger, Johann',
+                    ];
+
+        $user = $users[$this->counter];
+        $pieces = explode(",", $users[$this->counter]);
+
+        $email = strtolower($pieces[0]) . '@home.at';
+
+        $this->counter += 1;
+
+        $this->counter === 1 ? $role = 1 : $role = 0;
+
         return [
-            'name' => 'Karl Dirneder',
-            'email' => 'charly@home.at',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+
+                'name' => $user,
+                'email' => $email,
+                'phone1' => $this->faker->phoneNumber(),
+                'phone2' => $this->faker->phoneNumber(),
+                'address' => $this->faker->address,
+                'category_id' => random_int(1, 3),
+                'isActive' => 1,
+                'role' => $role,
+                'email_verified_at' => now(),
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'remember_token' => Str::random(10),
+
         ];
+
+
+
+
     }
+
+    // Brunner, Gerald
+    // Freinhofer,Martin
+    // Holzer, Emanuel
+    // Lettner, Birgit
+    // Moser, Philip
+    // Ortmayr Stephan
+    // Pühringer, Johann
+    // Steinkellner, Günther
+    // Pointer, Rudi
+    // Steinbauer, Karl
+    // Kohler, Sascha
+    // Strasser, Franz
+    // Schwaiger, Johann
+    //
 
     /**
      * Indicate that the model's email address should be unverified.

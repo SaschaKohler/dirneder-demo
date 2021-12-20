@@ -6,21 +6,30 @@
           <v-col cols="12" sm="12" md="10" lg="4">
             <v-card>
               <v-card-title class="d-flex align-center justify-center">
-                <Link :href="route('/')">
-                  <application-logo style="height: 75" />
+                <Link :href="route('/')" class="text-decoration-none">
+                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
+                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+
                 </Link>
               </v-card-title>
               <v-card-text>
-                <p class="mb-2">You are only one step a way from your new password, recover your password now.</p>
+                <p class="font-weight-semibold brown--text mb-2 text-center">
+                  Mitarbeiter - Kunden - Aufträge
+                </p>
+              </v-card-text>
+
+              <v-card-text>
+                <p class="mb-2">Nur noch einen Schritt bis zum neuen Passwort</p>
               </v-card-text>
               <v-card-text>
                 <v-form @submit.prevent="submit">
                   <v-text-field
                     v-model="form.password"
                     prepend-inner-icon="mdi-lock"
-                    label="Password"
+                    label="Neues Passwort"
                     outlined
                     dense
+                    color="dirneder"
                     :error-messages="form.errors.password"
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPassword ? 'text' : 'password'"
@@ -29,16 +38,17 @@
                   <v-text-field
                     v-model="form.password_confirmation"
                     prepend-inner-icon="mdi-lock"
-                    label="Password Confirmation"
+                    label="Passwort bestätigen"
                     :error-messages="form.errors.password_confirmation"
                     outlined
                     dense
+                    color="dirneder"
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="showPassword ? 'text' : 'password'"
                     @click:append="showPassword = !showPassword"
                   />
-                  <v-btn :loading="form.processing" type="submit" block color="primary" class="mt-3"
-                    >Change Password</v-btn
+                  <v-btn :loading="form.processing" type="submit" block color="brown lighten-2" class="mt-3"
+                    >Passwort ändern</v-btn
                   >
                 </v-form>
               </v-card-text>
