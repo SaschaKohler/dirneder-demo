@@ -14,7 +14,7 @@ class Event extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-//        'planned' => 'datetime: d.M.Y'
+        'startTime' => 'datetime: H:i'
 
     ];
 

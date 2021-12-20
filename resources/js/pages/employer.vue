@@ -56,7 +56,6 @@
       <v-sheet height="600">
         <v-calendar
           ref="calendar"
-          v-model="value"
           locale="de"
           :weekdays="weekday"
           :type="type"
@@ -69,7 +68,7 @@
           @click:event="showEvent"
         >
           <template v-slot:event="{ event }">
-            <p class="text-caption">{{event.type}}/{{ event.customer.lastName}}</p>
+            <p class="text-caption">{{ event.type }}/{{ event.customer.lastName }}</p>
           </template>
         </v-calendar>
         <v-menu
@@ -88,29 +87,72 @@
               dark
             >
               <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
-              <div class="flex-grow-1"></div>
+              <v-spacer></v-spacer>
+              <v-dialog
+                ref="dialog"
+                v-model="modal2"
+                :return-value.sync="selectedEvent.startTimestamp"
+                persistent
+                width="290px"
+              >
+                <template v-slot:activator="{ on }">
+
+                  <v-btn icon
+                         prepend-icon="mdi-clock-time-four-outline"
+                         readonly
+                         v-on="on"
+                  >
+                    <v-icon>mdi-plus-circle-outline</v-icon>
+                  </v-btn>
+                </template>
+                <v-time-picker
+                  v-if="modal2"
+                  v-model="selectedEvent.startTimestamp"
+                  full-width
+                  color="brown"
+                  header-color="brown"
+                  format="24hr"
+
+                >
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    color="error"
+                    @click="modal2 = false"
+                  >
+                    Abbrechen
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="brown"
+                    @click="$refs.dialog.save(selectedEvent.startTimestamp)"
+                  >
+                    OK
+                  </v-btn>
+                </v-time-picker>
+              </v-dialog>
             </v-toolbar>
             <v-card-text>
               <p class="text-lg-subtitle-2">{{ selectedEvent.start }}</p>
               <p class="text-h5">
-                {{selectedEvent.customer.firstName}} {{selectedEvent.customer.lastName}}
+                {{ selectedEvent.customer.firstName }} {{ selectedEvent.customer.lastName }}
               </p>
               <p class="text-caption">
-                {{selectedEvent.customer.street}}
+                {{ selectedEvent.customer.street }}
               </p>
               <p class="text-bold">
-                {{selectedEvent.customer.PLZ}} {{selectedEvent.customer.city}}
+                {{ selectedEvent.customer.PLZ }} {{ selectedEvent.customer.city }}
               </p>
               <div class="d-flex justify-space-around">
                 <ul><span class="text-subtitle-1 text-decoration-underline">Team:</span>
                   <li v-for="employee in selectedEvent.employees" :key="employee.id">
-                    {{employee.name}}
+                    {{ employee.name }}
                   </li>
                 </ul>
                 <ul>
                   <span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
                   <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
-                    {{vehicle.branding}}
+                    {{ vehicle.branding }}
                   </li>
                 </ul>
               </div>
@@ -139,21 +181,22 @@ export default {
   props: ["events"],
   data: () => ({
     selectedEvent: {
-      id:null,
-      start:null,
+      id: null,
+      start: null,
       customer: {
-        firstName:null,
-        lastName:null,
-        PLZ:null,
-        street:null,
-        city:null,
+        firstName: null,
+        lastName: null,
+        PLZ: null,
+        street: null,
+        city: null,
       },
-      employees:{},
-      color:null,
+      employees: {},
+      color: null,
     },
 
     selectedElement: null,
     selectedOpen: false,
+    modal2: false,
     breadcrumbs: [
       {
         text: "App",
@@ -182,22 +225,23 @@ export default {
       {text: 'Mo - Fr', value: [1, 2, 3, 4, 5]},
       {text: 'Mo, Mi, Fr', value: [1, 3, 5]},
     ],
-    value: ''
   }),
   methods: {
-    viewDay ({ date }) {
+    viewDay({date}) {
       this.focus = date
       this.type = 'day'
     },
-    showEvent ({ nativeEvent, event }) {
+    showEvent({nativeEvent, event}) {
       const open = () => {
         this.selectedEvent.color = event.color
         this.selectedEvent.type = event.type
         this.selectedEvent.employees = event.employees
         this.selectedEvent.vehicles = event.vehicles
 
-        this.selectedEvent.start = (event.start)
-        this.selectedEvent.end = (event.end)
+        this.selectedEvent.start = event.start
+        this.selectedEvent.end = event.end
+
+        this.selectedEvent.startTime = event.startTime
 
         this.selectedEvent.customer.lastName = event.customer.lastName
         this.selectedEvent.customer.firstName = event.customer.firstName

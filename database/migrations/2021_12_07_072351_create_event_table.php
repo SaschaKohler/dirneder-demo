@@ -20,8 +20,8 @@ class CreateEventTable extends Migration
             $table->string('name');
             $table->date('start')->default(Carbon::now());
             $table->date('end')->default(Carbon::tomorrow());
-            $table->timestamp('startTimestamp')->default(Carbon::now());
-            $table->timestamp('endTimestamp')->nullable()->default(null);
+            $table->time('startTime')->default(Carbon::now());
+            $table->time('endTime')->nullable()->default(null);
             $table->string('color');
             $table->string('type');
             $table->foreignId('customer_id');
