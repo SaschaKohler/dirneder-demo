@@ -56,6 +56,7 @@
       <v-sheet height="600">
         <v-calendar
           ref="calendar"
+          v-model="value"
           locale="de"
           :weekdays="weekday"
           :type="type"
@@ -209,6 +210,7 @@ export default {
         href: "/home",
       },
     ],
+    value:'',
     type: 'month',
     types: [
       {name: 'Monat', value: 'month'},

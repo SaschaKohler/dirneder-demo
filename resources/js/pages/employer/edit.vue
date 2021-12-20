@@ -2,16 +2,15 @@
   <employer-layout>
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
-        <h5 class="text-h5 font-weight-bold">Profile</h5>
+        <h5 class="text-h5 font-weight-bold">Benutzerprofil</h5>
         <v-breadcrumbs :items="breadcrumbs" class="pa-0"></v-breadcrumbs>
       </div>
     </v-banner>
     <div class="d-flex flex-wrap justify-center ">
       <v-sheet width="600">
         <v-card class="">
-          <v-toolbar dense dark color="brown lighten-2" class="text-h6">{{
-              formTitle
-            }}
+          <v-toolbar dense dark color="brown lighten-2" class="text-h6">
+            Profil bearbeiten
           </v-toolbar>
           <v-card-text class="pt-4">
             <v-text-field
@@ -98,7 +97,7 @@
             <div class="d-flex"></div>
           </v-card-text>
           <v-card-actions>
-            <v-btn :disabled="form.processing" text color="error" >Abbrechen</v-btn>
+            <v-btn :disabled="form.processing" text color="error">Abbrechen</v-btn>
             <v-spacer/>
             <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
             >Speichern
@@ -169,12 +168,6 @@ export default {
         },
       });
     },
-
-    computed: {
-      formTitle() {
-        return "Profil bearbeiten";
-      },
-    }
   }
 }
 </script>
