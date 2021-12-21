@@ -164,4 +164,17 @@ class EventController extends Controller
             'text' => 'Datensatz gelöscht!',
         ]);
     }
+
+    public function exportCSV()
+    {
+        $data = Event::all();
+
+        $handle = fopen('export.csv', 'w');
+
+        foreach ($data as $row) {
+            fputcsv($handle, $row->toArray(), ';');
+        }
+
+        fclose($handle);
+    }
 }

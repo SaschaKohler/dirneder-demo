@@ -32,8 +32,6 @@ class EventFactory extends Factory
             'name' => $this->faker->jobTitle,
             'start' => $start,
             'end' => $end,
-            'startTime' => Carbon::now(),
-            'endTime' => null,
             'color'=>  $colors[array_rand($colors)],
             'type' => $type[array_rand($type)],
             'customer_id' => random_int(1,5)

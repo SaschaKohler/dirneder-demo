@@ -93,21 +93,8 @@ export default {
     return {
       drawer: !this.$vuetify.breakpoint.smAndDown,
       items: [
-        { icon: "mdi-apps", title: "Start", to: "home" },
-        { icon: "mdi-run", title: "Meine Aufträge", to: "home",
-          sublinks : [
-            { icon: "mdi-run", title: "Termine", to: "home"},
-            {icon: "mdi-run", title: "Geräte", to: "home"},
-
-          ]
-        },
-        { icon: "mdi-run", title: "Fahrzeuge", to: "home",
-          sublinks : [
-            { icon: "mdi-run", title: "Zug Fahrzeuge", to: "home"},
-            {icon: "mdi-run", title: "Anhänger", to: "home"},
-
-          ]
-        },
+        { icon: "mdi-apps", title: "Start", to: "employer.index" },
+        { icon: "mdi-run", title: "Meine Aufträge", to: "employer.events"}
 
       ],
       miniVariant: false,
