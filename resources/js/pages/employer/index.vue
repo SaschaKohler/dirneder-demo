@@ -1,259 +1,268 @@
 <template>
-  <admin-layout>
+  <employer-layout>
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
-        <h5 class="text-h5 font-weight-bold">Mitarbeiter</h5>
-        <v-breadcrumbs :items="breadcrumbs"  color="brown--text" class="pa-0"></v-breadcrumbs>
+        <h5 class="text-h5 font-weight-bold">Dashboard</h5>
+        <v-breadcrumbs :items="breadcrumbs" class="pa-0"></v-breadcrumbs>
       </div>
     </v-banner>
-    <div class="d-flex flex-wrap align-center">
-      <v-text-field
-        v-model="search"
-        prepend-inner-icon="mdi-magnify"
-        label="Suche"
-        single-line
-        dense
-        clearable
-        hide-details
-        class="py-4"
-        solo
-        style="max-width: 300px"
-      />
-      <v-spacer />
-      <v-btn color="brown lighten-4 brown--text" @click="create">
-        <v-icon dark left> mdi-plus </v-icon> Neu
-      </v-btn>
-    </div>
-    <v-data-table
-      :items="items.data"
-      :headers="headers"
-      :options.sync="options"
-      :server-items-length="items.total"
-      :loading="isLoadingTable"
-      class="elevation-1"
-    >
-      <template #[`item.index`]="{ index }">
-        {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
-      </template>
-      <template v-slot:item.category_id="{ item }">
-        {{ item.category.title }}
-      </template>
-      <template #[`item.action`]="{ item }">
-        <v-btn x-small color="yellow lighten-2" @click="editItem(item)">
-          <v-icon small> mdi-pencil </v-icon>
+    <div>
+      <v-sheet
+        tile
+        height="54"
+        class="d-flex"
+      >
+        <v-btn
+          icon
+          class="ma-2"
+          @click="$refs.calendar.prev()"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-btn x-small color="red lighten-2" dark @click="deleteItem(item)">
-          <v-icon small> mdi-delete </v-icon>
+        <v-select
+          v-model="type"
+          :items="types"
+          item-text="name"
+          item-value="value"
+          dense
+          outlined
+          color="brown"
+          hide-details
+          class="ma-2"
+          label="Typ"
+        ></v-select>
+        <v-select
+          v-model="weekday"
+          :items="weekdays"
+          dense
+          outlined
+          hide-details
+          color="brown"
+          label="Wochentage"
+          class="ma-2"
+        ></v-select>
+        <v-toolbar-title class="pt-3 pl-3" v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          class="ma-2"
+          @click="$refs.calendar.next()"
+        >
+          <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
-      </template>
-    </v-data-table>
-    <v-dialog v-model="dialog" max-width="600px" scrollable>
-      <v-card>
-        <v-toolbar dense dark color="dirneder" class="text-h6">{{
-          formTitle
-        }}</v-toolbar>
-        <v-card-text class="pt-4">
-          <v-text-field
-            v-model="form.name"
-            label="Name"
-            color="brown"
-            :error-messages="form.errors.name"
-            type="text"
-            outlined
-            dense
-          />
-          <v-text-field
-            v-model="form.email"
-            label="Email"
-            :error-messages="form.errors.email"
-            color="brown"
-            outlined
-            dense
-          />
-          <v-select
-            v-model="form.category_id"
-            :items="categories"
-            item-text="title"
-            item-value="id"
-            label="Kategorie"
-            color="brown"
-            outlined
-            dense
-          ></v-select>
-          <v-textarea
-            v-model="form.address"
-            label="Adresse"
-            :error-messages="form.errors.address"
-            color="brown"
-            outlined
-            dense
-          />
-
-          <div class="d-flex"></div>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn :disabled="form.processing" text color="error" @click="dialog = false">Abbrechen</v-btn>
-          <v-spacer />
-          <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
-            >Speichern</v-btn
+      </v-sheet>
+      <v-sheet height="600">
+        <v-calendar
+          ref="calendar"
+          v-model="value"
+          locale="de"
+          :weekdays="weekday"
+          :type="type"
+          :events="events"
+          :event-category="events.type"
+          :event-overlap-mode="mode"
+          :event-overlap-threshold="30"
+          :event-color="events.color"
+          @click:date="viewDay"
+          @click:event="showEvent"
+        >
+          <template v-slot:event="{ event }">
+            <p class="text-caption">{{ event.type }}/{{ event.customer.lastName }}</p>
+          </template>
+        </v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card
+            color="grey lighten-4"
+            min-width="350px"
+            flat
           >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog v-model="dialogDelete" max-width="500">
-      <v-card>
-        <v-toolbar dense dark color="dirneder" class="text-h6"
-          >Datensatz löschen</v-toolbar
-        >
-        <v-card-text class="text-h6"
-          >Löschen bestätigen ?</v-card-text
-        >
-        <v-card-actions>
-          <v-spacer />
-          <v-btn :disabled="form.processing" text color="error" @click="dialogDelete = false">Abbruch</v-btn>
-          <v-btn :loading="form.processing" text color="primary" @click="destroy">Ja</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </admin-layout>
+            <v-toolbar
+              :color="selectedEvent.color"
+              dark
+            >
+              <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-dialog
+                ref="dialog"
+                v-model="modal2"
+                :return-value.sync="selectedEvent.startTimestamp"
+                persistent
+                width="290px"
+              >
+                <template v-slot:activator="{ on }">
+
+                  <v-btn icon
+                         prepend-icon="mdi-clock-time-four-outline"
+                         readonly
+                         v-on="on"
+                  >
+                    <v-icon>mdi-plus-circle-outline</v-icon>
+                  </v-btn>
+                </template>
+                <v-time-picker
+                  v-if="modal2"
+                  v-model="selectedEvent.startTimestamp"
+                  full-width
+                  color="brown"
+                  header-color="brown"
+                  format="24hr"
+
+                >
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    color="error"
+                    @click="modal2 = false"
+                  >
+                    Abbrechen
+                  </v-btn>
+                  <v-btn
+                    text
+                    color="brown"
+                    @click="$refs.dialog.save(selectedEvent.startTimestamp)"
+                  >
+                    OK
+                  </v-btn>
+                </v-time-picker>
+              </v-dialog>
+            </v-toolbar>
+            <v-card-text>
+              <p class="text-lg-subtitle-2">{{ selectedEvent.start }}</p>
+              <p class="text-h5">
+                {{ selectedEvent.customer.firstName }} {{ selectedEvent.customer.lastName }}
+              </p>
+              <p class="text-caption">
+                {{ selectedEvent.customer.street }}
+              </p>
+              <p class="text-bold">
+                {{ selectedEvent.customer.PLZ }} {{ selectedEvent.customer.city }}
+              </p>
+              <div class="d-flex justify-space-around">
+                <ul><span class="text-subtitle-1 text-decoration-underline">Team:</span>
+                  <li v-for="employee in selectedEvent.employees" :key="employee.id">
+                    {{ employee.name }}
+                  </li>
+                </ul>
+                <ul>
+                  <span class="text-subtitle-1 text-decoration-underline">Fahrzeuge:</span>
+                  <li v-for="vehicle in selectedEvent.vehicles" :key="vehicle.id">
+                    {{ vehicle.branding }}
+                  </li>
+                </ul>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="secondary"
+                @click="selectedOpen = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </v-sheet>
+    </div>
+  </employer-layout>
 </template>
 
 <script>
-import AdminLayout from "../../layouts/AdminLayout.vue";
+import EmployerLayout from "../../layouts/EmployerLayout";
+
 export default {
-  props: ["items" , "categories"],
-  components: { AdminLayout },
-  data() {
-    return {
-      headers: [
-        { text: "No", value: "index", sortable: false },
-        { text: "Name", value: "name" },
-        { text: "Email", value: "email" },
-        { text: "Funktion", value: "category_id" },
-        { text: "Angelegt", value: "created_at" },
-        { text: "Actions", value: "action", sortable: false },
-      ],
-      breadcrumbs: [
-        {
-          text: "App",
-          disabled: false,
-          href: "/home",
-        },
-        {
-          text: "Belegschaft",
-          disabled: false,
-          href: "",
-        },
-        {
-          text: "Mitarbeiter",
-          disabled: true,
-          href: "/employee",
-        },
-      ],
-      dialog: false,
-      dialogDelete: false,
-      isUpdate: false,
-      isLoading: false,
-      isLoadingTable: false,
-      itemId: null,
-      options: {},
-      search: null,
-      params: {},
-      form: this.$inertia.form({
-        name: null,
-        job_title: null,
-        email: null,
-        address: null,
-        category_id: null
-      }),
-    };
-  },
-  computed: {
-    formTitle() {
-      return this.isUpdate ? "Mitarbeiter bearbeiten" : "Mitarbeiter anlegen";
+  components: {EmployerLayout},
+  props: ["events"],
+  data: () => ({
+    selectedEvent: {
+      id: null,
+      start: null,
+      customer: {
+        firstName: null,
+        lastName: null,
+        PLZ: null,
+        street: null,
+        city: null,
+      },
+      employees: {},
+      color: null,
     },
-  },
-  watch: {
-    options: function (val) {
-      this.params.page = val.page;
-      this.params.page_size = val.itemsPerPage;
-      if (val.sortBy.length != 0) {
-        this.params.sort_by = val.sortBy[0];
-        this.params.order_by = val.sortDesc[0] ? "desc" : "asc";
-      } else {
-        this.params.sort_by = null;
-        this.params.order_by = null;
-      }
-      this.updateData();
-    },
-    search: function (val) {
-      this.params.search = val;
-      this.updateData();
-    },
-  },
+
+    selectedElement: null,
+    selectedOpen: false,
+    modal2: false,
+    breadcrumbs: [
+      {
+        text: "App",
+        disabled: false,
+        href: "/home",
+      },
+      {
+        text: "Dashboard",
+        disabled: true,
+        href: "/home",
+      },
+    ],
+    value:'',
+    type: 'month',
+    types: [
+      {name: 'Monat', value: 'month'},
+      {name: 'Woche', value: 'week'},
+      {name: 'Tag', value: 'day'},
+      {name: '4 Tage', value: '4day'}
+    ],
+    mode: 'stack',
+    modes: ['stack', 'column'],
+    weekday: [0, 1, 2, 3, 4, 5, 6],
+    weekdays: [
+      {text: 'So - Sa', value: [0, 1, 2, 3, 4, 5, 6]},
+      {text: 'Mo - So', value: [1, 2, 3, 4, 5, 6, 0]},
+      {text: 'Mo - Fr', value: [1, 2, 3, 4, 5]},
+      {text: 'Mo, Mi, Fr', value: [1, 3, 5]},
+    ],
+  }),
   methods: {
-    updateData() {
-      this.isLoadingTable = true
-      this.$inertia.get("/employee", this.params, {
-        preserveState: true,
-        preserveScroll: true,
-        onSuccess: () => {
-          this.isLoadingTable = false
-        },
-      });
+    viewDay({date}) {
+      this.focus = date
+      this.type = 'day'
     },
-    create() {
-      this.dialog = true;
-      this.form.reset();
-      this.form.clearErrors();
-    },
-    editItem(item) {
-      this.form.clearErrors();
-      this.form.name = item.name;
-      this.form.email = item.email;
-      this.form.job_title = item.job_title;
-      this.form.address = item.address;
-      this.form.category_id = item.category.id;
-      this.isUpdate = true;
-      this.itemId = item.id;
-      this.dialog = true;
-    },
-    deleteItem(item) {
-      this.itemId = item.id;
-      this.dialogDelete = true;
-    },
-    destroy() {
-      this.form.delete(route("employee.destroy", this.itemId), {
-        preserveScroll: true,
-        onSuccess: () => {
-          this.dialogDelete = false;
-          this.itemId = null;
-        },
-      });
-    },
-    submit() {
-      if (this.isUpdate) {
-        this.form.put(route("employee.update", this.itemId), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.isLoading = false;
-            this.dialog = false;
-            this.isUpdate = false;
-            this.itemId = null;
-            this.form.reset();
-          },
-        });
-      } else {
-        this.form.post(route("employee.store"), {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.isLoading = false;
-            this.dialog = false;
-            this.form.reset();
-          },
-        });
+    showEvent({nativeEvent, event}) {
+      const open = () => {
+        this.selectedEvent.color = event.color
+        this.selectedEvent.type = event.type
+        this.selectedEvent.employees = event.employees
+        this.selectedEvent.vehicles = event.vehicles
+
+        this.selectedEvent.start = event.start
+        this.selectedEvent.end = event.end
+
+        this.selectedEvent.startTime = event.startTime
+
+        this.selectedEvent.customer.lastName = event.customer.lastName
+        this.selectedEvent.customer.firstName = event.customer.firstName
+        this.selectedEvent.customer.street = event.customer.street
+        this.selectedEvent.customer.PLZ = event.customer.PLZ
+        this.selectedEvent.customer.city = event.customer.city
+
+        this.selectedElement = nativeEvent.target
+        setTimeout(() => this.selectedOpen = true, 10)
       }
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        setTimeout(open, 10)
+      } else {
+        open()
+      }
+      nativeEvent.stopPropagation()
     },
-  },
-};
+  }
+
+}
 </script>
