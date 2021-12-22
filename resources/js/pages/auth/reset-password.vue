@@ -1,5 +1,19 @@
 <template>
   <guest-layout>
+    <v-app-bar color="dirneder" :clipped-left="false" fixed dark app>
+      <Link v-if="$page.props.auth.user" :href="route('home')">
+        <v-btn text>Home</v-btn>
+      </Link>
+      <div v-else>
+        <Link :href="route('login')">
+          <v-btn text>Login</v-btn>
+        </Link>
+        <Link :href="route('register')">
+          <v-btn text>Registrieren</v-btn>
+        </Link>
+      </div>
+    </v-app-bar>
+
     <v-main>
       <v-container fluid>
         <v-row align="center" justify="center" style="height: 100vh">

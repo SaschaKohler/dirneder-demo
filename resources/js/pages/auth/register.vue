@@ -1,8 +1,6 @@
 <template>
   <guest-layout>
     <v-app-bar color="dirneder" :clipped-left="false" fixed dark app>
-      <v-toolbar-title v-text="appName" />
-      <v-spacer />
       <Link v-if="$page.props.auth.user" :href="route('home')">
         <v-btn text>Home</v-btn>
       </Link>
