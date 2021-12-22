@@ -26,14 +26,25 @@ class EventFactory extends Factory
     {
         $start = $this->faker->dateTimeBetween('now','+1days');
         $end = $this->faker->dateTimeBetween($start,'+2 day');
-        $colors =  ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'];
-        $type = ['Baumpflege','Zaunbau','pers. Termin','Transport','Sonstiges'];
+
+        $type = array(
+                'Baumpflege' => 'green darken-2'  ,
+                'Gartenpflege' => 'green'  ,
+                'Transport' => 'blue lighten2',
+                'Zaunbau' => 'brown ligthen-2',
+                'pers. Termin' => 'red lighten-1',
+                'Winterdienst' => 'grey lighten-2',
+                'Sonstiges' => 'orange lighten-2'
+        );
+        $k = array_rand($type);
+        $v = $type[$k];
+
         return [
             'name' => $this->faker->jobTitle,
             'start' => $start,
             'end' => $end,
-            'color'=>  $colors[array_rand($colors)],
-            'type' => $type[array_rand($type)],
+            'color'=>  $v,
+            'type' => $k,
             'customer_id' => random_int(1,5)
         ];
     }

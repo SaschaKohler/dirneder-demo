@@ -21,11 +21,12 @@ class CreateEventTable extends Migration
             $table->date('start')->default(Carbon::now());
             $table->date('end')->default(Carbon::tomorrow());
             $table->time('startTime')->default(Carbon::parse('07:00')->format('H:I'));
-            $table->time('endTime')->nullable()->default(null);
+            $table->time('endTime')->nullable()->default(Carbon::parse('07:00')->format('H:I'));
             $table->time('workingHours')->nullable()->default(null);
             $table->string('color');
             $table->string('type');
-            $table->foreignId('customer_id');
+            $table->foreignId('customer_id')->references('id')
+                ->on('customers')->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->timestamps();
         });

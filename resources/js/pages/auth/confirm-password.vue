@@ -7,14 +7,14 @@
             <v-card>
               <v-card-title class="d-flex align-center justify-center">
                 <Link :href="route('/')" class="text-decoration-none">
-                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
-                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">sk.IT</p>
+                  <p class="brown--text text-center text-subtitle-2">Lizensiert für <span class="text-subtitle-2 ">Dirneder KG (Karl Dirneder)</span></p>
 
                 </Link>
               </v-card-title>
               <v-card-text>
                 <p class="font-weight-semibold brown--text mb-2 text-center">
-                  Mitarbeiter - Kunden - Aufträge
+                  Mitarbeiter - Kunden - Aufträge - Fahrzeuge
                 </p>
               </v-card-text>
 

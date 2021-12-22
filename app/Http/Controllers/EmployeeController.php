@@ -92,9 +92,14 @@ class EmployeeController extends Controller
 
         ]);
 
+        $workingHours = Carbon::parse($request['endTime'])->diff(Carbon::parse($request['startTime']))->format('%H:%I');
+
+        $event->workingHours = $workingHours;
+        $event->save();
+
         $event->update($data);
 
-        $workingHours = Carbon::parse($request['endTime'])->diff(Carbon::parse($request['startTime']))->format('%H:%I');
+
 
         return redirect()->back()->with('message', [
             'type' => 'success',

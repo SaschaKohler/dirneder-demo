@@ -19,6 +19,13 @@ class Event extends Model
 
     ];
 
+    public function scopeWorkingHoursSum($query,$value)
+    {
+        $query->whereHas('employees', function ($query) use ($value) {
+            $query->where('users.name', 'Like', '%' . $value . '%');
+        });
+
+    }
 
     public function customer()
     {
