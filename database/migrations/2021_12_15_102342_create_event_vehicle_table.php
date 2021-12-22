@@ -15,8 +15,10 @@ class CreateEventVehicleTable extends Migration
     {
         Schema::create('event_vehicle', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id');
-            $table->foreignId('vehicle_id');
+            $table->foreignId('event_id')->references('id')
+            ->on('events')->onDelete('cascade');
+            $table->foreignId('vehicle_id')->references('id')
+            ->on('vehicles')->onDelete('cascade');
 
             $table->timestamps();
         });

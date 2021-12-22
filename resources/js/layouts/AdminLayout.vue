@@ -95,6 +95,8 @@ export default {
           sublinks: [
             {icon: "mdi-run", title: "Mitarbeiter", to: "user.index"},
             {icon: "mdi-run", title: "Kategorien", to: "employeeCategory.index"},
+            {icon: "mdi-run", title: "Arbeitszeit", to: "workingHours.index"},
+
           ]
         },
         {icon: "mdi-newspaper", title: "Aufträge", to: "event.index"},

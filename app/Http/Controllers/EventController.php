@@ -26,7 +26,14 @@ class EventController extends Controller
                 $query->latest();
             })
             ->when($request->search, function ($query, $value) {
-                $query->where('type', 'LIKE', '%' . $value . '%');
+                $query->where('type', 'LIKE', '%' . $value . '%')
+                    ->orWhere('name', 'LIKE', '%' . $value . '%')
+                    ->orWhereHas('employees', function ($query) use ($value){
+                        $query->where('users.name','LIKE','%' . $value . '%' );
+                    })
+                    ->orWhereHas('customer', function ($query) use ($value){
+                        $query->where('customers.lastName','LIKE','%' .$value . '%');
+                    });
             })
             ->with('customer')
             ->with('employees')
@@ -163,5 +170,18 @@ class EventController extends Controller
             'type' => 'success',
             'text' => 'Datensatz gelöscht!',
         ]);
+    }
+
+    public function exportCSV()
+    {
+        $data = Event::all();
+
+        $handle = fopen('export.csv', 'w');
+
+        foreach ($data as $row) {
+            fputcsv($handle, $row->toArray(), ';');
+        }
+
+        fclose($handle);
     }
 }

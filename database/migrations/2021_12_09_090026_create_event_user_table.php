@@ -15,8 +15,12 @@ class CreateEventUserTable extends Migration
     {
         Schema::create('event_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id');
-            $table->foreignId('user_id');
+            $table->foreignId('event_id')
+                ->references('id')
+                ->on('events')->onDelete('cascade');
+            $table->foreignId('user_id')
+                ->references('id')
+                ->on('users')->onDelete('cascade');;
 
             $table->timestamps();
         });

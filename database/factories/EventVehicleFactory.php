@@ -17,7 +17,7 @@ class EventVehicleFactory extends Factory
     public function definition()
     {
         return [
-            'event_id' => random_int(1,10),
+            'event_id' => random_int(1,5),
             'vehicle_id' => random_int(3,12)
         ];
     }

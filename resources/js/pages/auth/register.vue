@@ -7,13 +7,15 @@
             <v-card class="rounded-xl">
               <v-card-title class="d-flex align-center justify-center">
                 <Link :href="route('/')" class="text-decoration-none">
-                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
-                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">sk.IT</p>
+                  <p class="brown--text text-center text-subtitle-2">Lizensiert für <span class="text-subtitle-2 ">Dirneder KG (Karl Dirneder)</span></p>
 
                 </Link>
               </v-card-title>
               <v-card-text>
-                <p class="mb-2 brown--text">Registrieren für die Managment App</p>
+                <p class="font-weight-semibold brown--text mb-2 text-center">
+                  Mitarbeiter - Kunden - Aufträge - Fahrzeuge
+                </p>
               </v-card-text>
               <v-card-text>
                 <v-form @submit.prevent="register">
@@ -40,7 +42,7 @@
                   <v-text-field
                     v-model="form.password"
                     prepend-inner-icon="mdi-lock"
-                    label="Password"
+                    label="Passwort"
                     color="green darken-3"
                     outlined
                     dense
@@ -52,7 +54,7 @@
                   <v-text-field
                     v-model="form.password_confirmation"
                     prepend-inner-icon="mdi-lock"
-                    label="Password Confirmation"
+                    label="Passwort bestätigen"
                     color="green darken-3"
                     :error-messages="form.errors.password_confirmation"
                     outlined
@@ -62,7 +64,7 @@
                     @click:append="showPassword = !showPassword"
                   />
                   <v-btn :loading="form.processing" type="submit" block color="brown lighten-4 brown--text" class="mt-3"
-                    >Register</v-btn
+                    >Registrieren</v-btn
                   >
                 </v-form>
               </v-card-text>

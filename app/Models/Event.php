@@ -14,10 +14,18 @@ class Event extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'startTime' => 'datetime: H:i'
+        'startTime' => 'datetime: H:i',
+        'endTime' => 'datetime: H:i'
 
     ];
 
+    public function scopeWorkingHoursSum($query,$value)
+    {
+        $query->whereHas('employees', function ($query) use ($value) {
+            $query->where('users.name', 'Like', '%' . $value . '%');
+        });
+
+    }
 
     public function customer()
     {

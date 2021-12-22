@@ -50,4 +50,9 @@ class User extends Authenticatable
         return $this->belongsTo(EmployeeCategory::class);
     }
 
+    public function works()
+    {
+        return $this->hasManyThrough(Event::class,'event_user');
+    }
+
 }

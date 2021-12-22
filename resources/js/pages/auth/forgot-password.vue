@@ -1,24 +1,24 @@
 <template>
-  <v-app>
+  <guest-layout>
     <v-main>
       <v-container fluid>
         <v-row align="center" justify="center" style="height: 100vh">
           <v-col cols="12" sm="12" md="10" lg="4">
-            <v-card>
-              <v-card-title class="d-flex align-center justify-center">
-                <Link :href="route('/')" class="text-decoration-none">
-                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">Dirneder</p>
-                  <p class="brown--text text-center text-h6">Ihr Profi für Garten und Zäune</p>
+            <v-card class="rounded-xl">
+            <v-card-title class="d-flex align-center justify-center">
+              <Link :href="route('/')" class="text-decoration-none">
+                <p class="font-weight-bold text-center green--text text--darken-2 text-h2">sk.IT</p>
+                <p class="brown--text text-center text-subtitle-2">Lizensiert für <span class="text-subtitle-2 ">Dirneder KG (Karl Dirneder)</span></p>
 
-                </Link>
-              </v-card-title>
-              <v-card-text>
-                <p class="font-weight-semibold brown--text mb-2 text-center">
-                  Mitarbeiter - Kunden - Aufträge
-                </p>
-              </v-card-text>
+              </Link>
+            </v-card-title>
+            <v-card-text>
+              <p class="font-weight-semibold brown--text mb-2 text-center">
+                Mitarbeiter - Kunden - Aufträge - Fahrzeuge
+              </p>
+            </v-card-text>
 
-              <v-card-text v-if="status">
+            <v-card-text v-if="status">
                 <v-alert type="success">{{ status }}</v-alert>
               </v-card-text>
               <v-card-text>
@@ -46,16 +46,17 @@
         </v-row>
       </v-container>
     </v-main>
-  </v-app>
+  </guest-layout>
 </template>
 
 <script>
 import ApplicationLogo from "../../components/ApplicationLogo.vue";
+import GuestLayout from "../../layouts/GuestLayout";
 export default {
   props: {
     status: String,
   },
-  components: { ApplicationLogo },
+  components: {GuestLayout, ApplicationLogo },
   data() {
     return {
       showPassword: false,

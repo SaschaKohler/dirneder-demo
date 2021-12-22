@@ -10,6 +10,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\WorkingHoursController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,20 +33,29 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
+Route::get('export', [EventController::class,'exportCSV'])->name('exportcsv');
 
 Route::group(['middleware' => 'auth'], function () {
 
-   Route::resource('employer', EmployeeController::class);
+
+    Route::get('employer',[EmployeeController::class,'index'])->name('employer.index');
+    Route::get('employer/events',[EmployeeController::class,'events'])->name('employer.events');
+    Route::get('employer/{user}',[EmployeeController::class,'edit'])->name('employer.edit');
+    Route::put('employer/{user}',[EmployeeController::class,'update'])->name('employer.update');
+    Route::put('employer/eventUpdate/{event}',[EmployeeController::class,'eventUpdate'])->name('employer.eventUpdate');
+
 
 
     Route::group(['middleware' => 'adminAuthenticated'], function () {
 
         Route::get('home', [HomeController::class, 'index'])->name('home');
 
+
         Route::resource('event', EventController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('vehicle', VehicleController::class)->only(['index']);
         Route::resource('user', UserController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('employeeCategory', EmployeeCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('workingHours', WorkingHoursController::class)->only(['index', 'store', 'update', 'destroy']);
 
         Route::resource('customer', CustomerController::class)->only(['index', 'store', 'update', 'destroy']);
     });
