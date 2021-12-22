@@ -266,3 +266,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.v-breadcrumbs >>> a {
+  color: green;
+}
+</style>

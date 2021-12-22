@@ -1,22 +1,33 @@
 <template>
   <guest-layout>
+    <v-app-bar color="dirneder" :clipped-left="false" fixed dark app>
+      <v-toolbar-title v-text="appName" />
+      <v-spacer />
+      <Link v-if="$page.props.auth.user" :href="route('home')">
+        <v-btn text>Home</v-btn>
+      </Link>
+      <div v-else>
+        <Link :href="route('login')">
+          <v-btn text>Login</v-btn>
+        </Link>
+        <Link :href="route('register')">
+          <v-btn text>Registrieren</v-btn>
+        </Link>
+      </div>
+    </v-app-bar>
+
     <v-main>
       <v-container fluid>
-        <v-row align="center" justify="center" style="height: 100vh">
-          <v-col cols="12" sm="12" md="10" lg="4">
+        <v-row align="center" justify="center" style="height: 90vh">
             <v-card class="rounded-xl">
-              <v-card-title class="d-flex align-center justify-center">
-                <Link :href="route('/')" class="text-decoration-none">
-                  <p class="font-weight-bold text-center green--text text--darken-2 text-h2">sk.IT</p>
-                  <p class="brown--text text-center text-subtitle-2">Lizensiert für <span class="text-subtitle-2 ">Dirneder KG (Karl Dirneder)</span></p>
-
-                </Link>
-              </v-card-title>
-              <v-card-text>
-                <p class="font-weight-semibold brown--text mb-2 text-center">
-                  Mitarbeiter - Kunden - Aufträge - Fahrzeuge
-                </p>
-              </v-card-text>
+              <v-card-title class="justify-center">
+              <Link :href="route('/')" class="text-decoration-none">
+                <ApplicationLogo></ApplicationLogo>
+              </Link>
+                    <h3 class="headline">Mitarbeiter - Kunden - Fahrzeuge - Aufträge</h3>
+                  </v-card-title>
+                  <v-card-text class="text-center">Lizensiert für Dirneder KG - Karl Dirneder
+                  </v-card-text>
               <v-card-text>
                 <v-form @submit.prevent="login">
                   <v-text-field
@@ -65,7 +76,6 @@
               </v-card-text>
               <v-card-text class="text-right"><span class="text-caption">Sascha Kohler </span>Software-Individual-Lösungen 2021</v-card-text>
             </v-card>
-          </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -92,6 +102,11 @@ export default {
   methods: {
     login() {
       this.form.post("/login");
+    },
+  },
+  computed: {
+    appName() {
+      return this.$page.props.appName
     },
   },
 };

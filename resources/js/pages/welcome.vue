@@ -16,9 +16,13 @@
       </div>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <v-card>
-          <v-card-title class="text-center" >Mitarbeiter - Kunden - Fahrzeuge - Aufträge</v-card-title>
+      <v-container fluid>
+        <v-card class="text-center rounded-xl">
+          <ApplicationLogo></ApplicationLogo>
+          <v-card-title class="justify-center">
+            <h3 class="headline">Mitarbeiter - Kunden - Fahrzeuge - Aufträge</h3>
+          </v-card-title>
+          <v-card-text><p>Lizensiert für Dirneder KG - Karl Dirneder</p></v-card-text>
         </v-card>
       </v-container>
     </v-main>
@@ -29,7 +33,7 @@
 import ApplicationLogo from '../components/ApplicationLogo.vue'
 import GuestLayout from '../layouts/GuestLayout.vue'
 export default {
-  components: { GuestLayout },
+  components: {ApplicationLogo, GuestLayout },
   computed: {
     appName() {
       return this.$page.props.appName
