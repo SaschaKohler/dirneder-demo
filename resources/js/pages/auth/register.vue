@@ -18,7 +18,7 @@
 
     <v-main>
       <v-container fluid>
-        <v-row align="center" justify="center" style="height: 100vh">
+        <v-row align="center" justify="center" style="height: 90vh">
             <v-card class="rounded-xl">
               <v-card-title class="justify-center">
                 <Link :href="route('/')" class="text-decoration-none">
