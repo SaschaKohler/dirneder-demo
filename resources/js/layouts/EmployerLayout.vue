@@ -66,7 +66,7 @@
         @click.stop="drawer = !drawer"
       />
       <v-app-bar-nav-icon v-else @click.stop="miniVariant = !miniVariant" />
-      <v-toolbar-title v-text="appName" />
+      <v-toolbar-title v-text="appName" class="d-none d-md-flex" />
       <v-spacer />
       <div class="d-flex align-center">
         <v-icon dark>mdi-account</v-icon>

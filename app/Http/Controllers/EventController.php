@@ -39,6 +39,7 @@ class EventController extends Controller
             ->with('employees')
             ->with('vehicles')
             ->paginate($request->page_size ?? 10);
+
         return Inertia::render('event/index', [
             'items' => $data,
             'customers' => Customer::all(),
@@ -55,7 +56,7 @@ class EventController extends Controller
             'name' => 'required|string',
             'color' => 'required',
             'start' => 'required',
-            'end' => 'required',
+            'end' => 'nullable',
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',
@@ -65,6 +66,7 @@ class EventController extends Controller
 
 
         $event = Event::create($data);
+        $event->end = $data['start'];
         $event->employees()->sync($request->employees);
         $event->vehicles()->sync($request->vehicles);
         $event->save();
@@ -82,7 +84,7 @@ class EventController extends Controller
             'name' => 'required|string',
             'color' => 'nullable',
             'start' => 'required',
-            'end' => 'required',
+            'end' => 'nullable',
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',

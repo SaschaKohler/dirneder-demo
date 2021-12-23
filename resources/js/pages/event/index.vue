@@ -89,7 +89,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 :value="dateFormattedStart"
-                label="Start"
+                label="Termin"
                 prepend-icon="mdi-calendar"
                 readonly
                 densed
@@ -116,50 +116,6 @@
                 text
                 color="dirneder"
                 @click="$refs.menu.save(form.start)"
-              >
-                OK
-              </v-btn>
-            </v-date-picker>
-          </v-menu>
-          <v-menu
-            ref="menu1"
-            v-model="menu1"
-            :close-on-content-click="false"
-            :return-value.sync="form.end"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                :value="dateFormattedEnd"
-                label="Ende"
-                prepend-icon="mdi-calendar"
-                readonly
-                densed
-                outlined
-                v-on="on"
-                color="dirneder"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="form.end"
-              no-title
-              scrollable
-              locale="de"
-            >
-              <v-spacer></v-spacer>
-              <v-btn
-                text
-                color="error"
-                @click="menu1 = false"
-              >
-                Abbrechen
-              </v-btn>
-              <v-btn
-                text
-                color="dirneder"
-                @click="$refs.menu1.save(form.end)"
               >
                 OK
               </v-btn>
@@ -275,8 +231,7 @@ export default {
       headers: [
         {text: "No", value: "index", sortable: false},
         {text: "Bezeichner", value: "name"},
-        {text: "Start", value: "start"},
-        {text: "Ende", value: "end"},
+        {text: "Termin", value: "start"},
         {text: "Leistung", value: "type"},
         {text: "Kunde", value: "customer_id"},
         {text: "Mitarbeiter", value: "employees", sortable: false},
@@ -398,7 +353,7 @@ export default {
       this.form.clearErrors();
       this.form.name = item.name;
       this.form.start = item.start;
-      this.form.end = item.end;
+      this.form.end = item.start;
       this.form.type = item.type;
       this.form.color = this.computedColor;
       this.form.customer_id = item.customer_id;

@@ -19,7 +19,7 @@ class CreateEventTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('start')->default(Carbon::now());
-            $table->date('end')->default(Carbon::tomorrow());
+            $table->date('end')->nullable()->default(Carbon::now());
             $table->time('startTime')->default(Carbon::parse('07:00')->format('H:I'));
             $table->time('endTime')->nullable()->default(Carbon::parse('07:00')->format('H:I'));
             $table->time('workingHours')->nullable()->default(null);

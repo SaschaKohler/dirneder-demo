@@ -37,7 +37,7 @@ class CustomerController extends Controller
             'PLZ' => 'required|numeric',
             'email' => 'required|email',
             'phone1' => 'required|string',
-            'phone2' => 'required|string',
+            'phone2' => 'nullable|string',
             'notes' => 'required|string'
         ]);
         Customer::create($data);

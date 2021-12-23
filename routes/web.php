@@ -52,7 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         Route::resource('event', EventController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('vehicle', VehicleController::class)->only(['index']);
+        Route::resource('vehicle', VehicleController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('user', UserController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('employeeCategory', EmployeeCategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('workingHours', WorkingHoursController::class)->only(['index', 'store', 'update', 'destroy']);

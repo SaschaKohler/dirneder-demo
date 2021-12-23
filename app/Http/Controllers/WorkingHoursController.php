@@ -12,13 +12,15 @@ class WorkingHoursController extends Controller
 
     public function index(Request $request)
     {
-        $data = Event::when($request->search, function ($query,$value) {
-            $query->whereHas('employees', function ($query) use ($value){
-                $query->where('users.name','Like','%' . $value . '%' );
+        $data = Event::when($request->search, function ($query, $value) {
+            $query->whereHas('employees', function ($query) use ($value) {
+                $query->where('users.name', 'Like', '%' . $value . '%');
             })
-
-            ->orWhereHas('vehicles', function ($query) use ($value){
-                    $query->where('branding','LIKE','%' . $value . '%');
+                ->orWhereHas('customer', function ($query) use ($value) {
+                    $query->where('lastName', 'LIKE', '%' . $value . '%');
+                })
+                ->orWhereHas('vehicles', function ($query) use ($value) {
+                    $query->where('branding', 'LIKE', '%' . $value . '%');
                 });
         })
             ->with('employees')
@@ -26,18 +28,17 @@ class WorkingHoursController extends Controller
             ->with('customer')
             ->paginate($request->page_size ?? 10);
 
-          $sum = Event::when($request->search, function ($query,$value) {
-              $query->whereHas('employees', function ($query) use ($value) {
-                  $query->where('users.name', 'Like', '%' . $value . '%');
-              })
-                  ->orWhereHas('vehicles', function ($query) use ($value){
-                      $query->where('branding','LIKE','%' . $value . '%');
-                  });
-          })
-
-              ->with('employees')
-              ->with('vehicles')
-              ->sum('workingHours');
+        $sum = Event::when($request->search, function ($query, $value) {
+            $query->whereHas('employees', function ($query) use ($value) {
+                $query->where('users.name', 'Like', '%' . $value . '%');
+            })
+                ->orWhereHas('vehicles', function ($query) use ($value) {
+                    $query->where('branding', 'LIKE', '%' . $value . '%');
+                });
+        })
+            ->with('employees')
+            ->with('vehicles')
+            ->sum('workingHours');
 
 
         return Inertia::render('workingHours/index', [

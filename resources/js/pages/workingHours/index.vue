@@ -2,7 +2,7 @@
   <admin-layout>
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
-        <h5 class="text-h5 font-weight-bold">Benutzer</h5>
+        <h5 class="text-h5 font-weight-bold">Laufzeiten</h5>
         <v-breadcrumbs :items="breadcrumbs" color="brown--text" class="pa-0"></v-breadcrumbs>
       </div>
     </v-banner>
@@ -16,6 +16,7 @@
       dense
       clearable
       hide-details
+      color="green"
       class="py-4"
       solo
       style="max-width: 300px"
@@ -80,7 +81,7 @@ export default {
           href: "",
         },
         {
-          text: "Arbeitszeit",
+          text: "Laufzeit",
           disabled: true,
           href: "/user",
         },
@@ -132,3 +133,8 @@ export default {
 </script>
 
 
+<style scoped>
+.v-breadcrumbs >>> a {
+  color: green;
+}
+</style>

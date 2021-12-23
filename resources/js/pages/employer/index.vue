@@ -89,49 +89,6 @@
             >
               <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog
-                ref="dialog"
-                v-model="modal2"
-                :return-value.sync="selectedEvent.startTimestamp"
-                persistent
-                width="290px"
-              >
-                <template v-slot:activator="{ on }">
-
-                  <v-btn icon
-                         prepend-icon="mdi-clock-time-four-outline"
-                         readonly
-                         v-on="on"
-                  >
-                    <v-icon>mdi-plus-circle-outline</v-icon>
-                  </v-btn>
-                </template>
-                <v-time-picker
-                  v-if="modal2"
-                  v-model="selectedEvent.startTimestamp"
-                  full-width
-                  color="brown"
-                  header-color="brown"
-                  format="24hr"
-
-                >
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="error"
-                    @click="modal2 = false"
-                  >
-                    Abbrechen
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="brown"
-                    @click="$refs.dialog.save(selectedEvent.startTimestamp)"
-                  >
-                    OK
-                  </v-btn>
-                </v-time-picker>
-              </v-dialog>
             </v-toolbar>
             <v-card-text>
               <p class="text-lg-subtitle-2">{{ selectedEvent.start }}</p>
