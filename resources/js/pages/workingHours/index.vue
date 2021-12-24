@@ -6,24 +6,49 @@
         <v-breadcrumbs :items="breadcrumbs" color="brown--text" class="pa-0"></v-breadcrumbs>
       </div>
     </v-banner>
-    <div class="d-flex flex-wrap align-center">
+    <div class="d-flex">
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="mdi-magnify"
+          label="Mitarbeiter/Fahrzeuge/Kunde"
+          single-line
+          dense
+          clearable
+          hide-details
+          color="green"
+          class="py-4"
+          solo
+          style="max-width: 300px"
+        />
+        <v-select
+          :items="months"
+          item-text="name"
+          item-value="id"
+          v-model="month"
+          label="Monat"
+          dense
+          outlined
+          color="green"
+          background-color="white"
+          class="pt-4 ml-10 d-inline-block"
+          style="max-width: 90px"
 
-    <v-text-field
-      v-model="search"
-      prepend-inner-icon="mdi-magnify"
-      label="Suche"
-      single-line
-      dense
-      clearable
-      hide-details
-      color="green"
-      class="py-4"
-      solo
-      style="max-width: 300px"
-    /><v-spacer></v-spacer>
-    <p class="text-h5">Summe Stunden: <span class="text-bold">{{sumOfHours}}</span></p>
+        />
+        <v-select
+          :items="years"
+          v-model="year"
+          label="Jahr"
+          dense
+          outlined
+          color="green"
+          background-color="white"
+          class="pt-4 ml-6 d-inline-block"
+          style="max-width: 100px"
+        />
+      <v-spacer></v-spacer>
+      <p class="text-h5">Summe Stunden: <span class="text-bold">{{ sumOfHours }}</span></p>
     </div>
-    <v-data-table
+      <v-data-table
       :items="events.data"
       :headers="headers"
       :options.sync="options"
@@ -32,8 +57,8 @@
       class="elevation-1"
     >
       <template #[`item.index`]="{ index }">
-      {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
-    </template>
+        {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
+      </template>
       <template v-slot:item.customer_id="{ item }">
         {{ item.customer.lastName }}
       </template>
@@ -56,7 +81,7 @@
 import AdminLayout from "../../layouts/AdminLayout";
 
 export default {
-  props: ["events","count","sumOfHours"],
+  props: ["events", "count", "sumOfHours"],
   components: {AdminLayout},
   data() {
     return {
@@ -64,8 +89,8 @@ export default {
         {text: "Bezeichner", value: "name"},
         {text: "Kunde", value: "customer_id"},
         {text: "Tätigkeit", value: "type"},
-        {text: "Mitarbeiter", value: "employees"},
-        {text: "Fahrzeuge", value: "vehicles"},
+        {text: "Mitarbeiter", value: "employees" ,sortable: false},
+        {text: "Fahrzeuge", value: "vehicles" , sortable : false},
         {text: "Tag", value: "start"},
         {text: "Stunden", value: "workingHours"},
       ],
@@ -86,11 +111,29 @@ export default {
           href: "/user",
         },
       ],
+      months: [
+        { id: '' , name: 'Alle'},
+        { id: 1 , name: 'Jan'},
+        { id: 2 , name: 'Feb'},
+        { id: 3 , name: 'Mär'},
+        { id: 4 , name: 'Apr'},
+        { id: 5 , name: 'Mai'},
+        { id: 6 , name: 'Jun'},
+        { id: 7 , name: 'Jul'},
+        { id: 8 , name: 'Aug'},
+        { id: 9 , name: 'Sep'},
+        { id: 10 , name: 'Okt'},
+        { id: 11 , name: 'Nov'},
+        { id: 12 , name: 'Dez'},
+         ],
+      years: ['2020','2021','2022'],
       search: null,
+      month:null,
+      year:null,
       isLoadingTable: false,
       params: {},
-      options:null,
-   }
+      options: null,
+    }
   },
   watch: {
     options: function (val) {
@@ -113,6 +156,15 @@ export default {
       this.params.search = val;
       this.updateData();
     },
+    month: function (val) {
+      this.params.month= val;
+      this.updateData()
+    },
+    year: function (val) {
+      this.params.year= val;
+      this.updateData()
+    },
+
   },
   methods: {
     updateData() {
@@ -136,5 +188,9 @@ export default {
 <style scoped>
 .v-breadcrumbs >>> a {
   color: green;
+}
+
+.v-input__slot .select {
+  width: 94px;
 }
 </style>
