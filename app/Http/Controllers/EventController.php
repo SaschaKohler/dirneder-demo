@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Notifications\NewEventPublished;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -128,29 +129,26 @@ class EventController extends Controller
 //        }
 
 
-//
-//        foreach ($employees as $employer){
-//
-//            $event = Event::whereHas('employees' , function($query) use ($employer) {
-//                return $query->where('user_id' , '=' , $employer );
-//            })->get()->toArray();
-//
-//            $employerInUse = User::find($employer)->toArray();
-//
-//            $eventStart = Carbon::createFromFormat('Y-m-d H:i:s',$event[0]['start'] )->format('d-m-Y');
-//            if(($startDate >= $eventStart) || ($startDate <= $endDate)){
-//                return redirect()->back()->with('message', [
-//                    'type' => 'error',
-//                    'text' =>  $employerInUse['name'] . ' bereits für '. $eventStart .' gebucht',
-//                ]);
-//            }
-//        }
 
 
         if (!is_array($employees[0])) {
+            foreach ($employees as $employer) {
+
+                $user = User::find($employer);
+
+                $user->notify(new NewEventPublished($event,$user));
+
+            }
+
             $event->employees()->sync($request->employees);
             $event->save();
+        } else {
+            $user = User::find($employees[0]['id']);
+
+            $user->notify(new NewEventPublished($event,$user));
+
         }
+
         if (!is_array($vehicles[0])) {
             $event->vehicles()->sync($request->vehicles);
             $event->save();

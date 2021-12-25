@@ -19,7 +19,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title v-text="item.title" />
+              <v-list-item-title v-text="item.title"/>
             </v-list-item-content>
           </v-list-item>
 
@@ -28,21 +28,21 @@
             no-action
             color="brown lighten-2"
           >
-              <template v-slot:activator color="brown">
-                <v-list-item-action>
-                  <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.title"/>
-                </v-list-item-content>
-              </template>
+            <template v-slot:activator>
+              <v-list-item-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.title"/>
+              </v-list-item-content>
+            </template>
             <v-list-item
               v-for="(item, i) in item.sublinks"
               :key="i"
               @click="goToPage(item.to)"
             >
               <v-list-item-content>
-                <v-list-item-title v-text="item.title" />
+                <v-list-item-title v-text="item.title"/>
               </v-list-item-content>
             </v-list-item>
 
@@ -65,23 +65,78 @@
         v-if="$vuetify.breakpoint.smAndDown"
         @click.stop="drawer = !drawer"
       />
-      <v-app-bar-nav-icon v-else @click.stop="miniVariant = !miniVariant" />
-      <v-toolbar-title v-text="appName" class="d-none d-md-flex" />
-      <v-spacer />
+      <v-app-bar-nav-icon v-else @click.stop="miniVariant = !miniVariant"/>
+      <v-toolbar-title v-text="appName" class="d-none d-md-flex"/>
+      <v-spacer/>
+
+
       <div class="d-flex align-center">
+        <div class="px-5">
+          <v-menu v-if="notifications" max-height="500px">
+            <template v-slot:activator="{ on , attrs }">
+
+              <v-badge
+                color="error"
+                overlap
+                :content="notifications.length"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon
+                  v-on="on">
+                  mdi-bell
+                </v-icon>
+              </v-badge>
+            </template>
+
+            <v-list three-line max-width="300px">
+              <template v-for="(item,index) in notifications">
+                <v-subheader
+                  v-if="item.data['Leistung']"
+                  :key="item.data['Leistung']"
+                  v-text="item.data['Leistung']"
+                ></v-subheader>
+
+                <v-divider
+                ></v-divider>
+                <v-list-item
+                  :key="index"
+                >
+                  <v-list-item-content d-flex>
+                    <v-list-item-title>{{ item.data['Kunde'] }} / {{ item.data['Addresse'] }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>Termin neu -> {{ item.data['neuer Termin'] }}</v-list-item-subtitle>
+
+                    <v-list-item-action>
+                      <v-btn
+                        x-small
+                        @click="markAsRead(item)"
+                        color="green white--text text-caption">
+                        gelesen
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-menu>
+          <v-icon v-else>
+            mdi-bell
+          </v-icon>
+        </div>
         <v-icon dark>mdi-account</v-icon>
         <div class="pl-3">
           <Link :href="route('employer.edit', {id: user.id})"
                 class="text-decoration-underline white--text text">
 
-          <span class="body-1 font-weight-medium">{{ user.name }}</span>
+            <span class="body-1 font-weight-medium">{{ user.name }}</span>
           </Link>
         </div>
       </div>
     </v-app-bar>
     <v-main>
       <v-container>
-        <slot />
+        <slot/>
       </v-container>
     </v-main>
   </v-app>
@@ -89,12 +144,13 @@
 
 <script>
 export default {
+  props: ["notifications"],
   data() {
     return {
       drawer: !this.$vuetify.breakpoint.smAndDown,
       items: [
-        { icon: "mdi-apps", title: "Start", to: "employer.index" },
-        { icon: "mdi-run", title: "Meine Aufträge", to: "employer.events"}
+        {icon: "mdi-apps", title: "Start", to: "employer.index"},
+        {icon: "mdi-run", title: "Meine Aufträge", to: "employer.events"}
 
       ],
       miniVariant: false,
@@ -140,6 +196,9 @@ export default {
     goToPage(page) {
       this.$inertia.visit(this.route(page));
     },
+    markAsRead(item) {
+      console.log(item.id)
+    }
   },
 };
 </script>

@@ -20,8 +20,12 @@ class EmployeeController extends Controller
             ->with('employees')
             ->with('vehicles')
             ->get();
+
+        $user = User::find(Auth::id());
+        $notifications = $user->unreadNotifications;
         return Inertia::render('employer/index', [
-            'events' => $data
+            'events' => $data,
+            'notifications' => $notifications
         ]);
     }
 

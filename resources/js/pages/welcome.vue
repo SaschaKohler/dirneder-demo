@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import ApplicationLogo from '../components/ApplicationLogo.vue'
-import GuestLayout from '../layouts/GuestLayout.vue'
+import ApplicationLogo from '@/components/ApplicationLogo'
+import GuestLayout from '@/layouts/GuestLayout'
 export default {
   components: {ApplicationLogo, GuestLayout },
   computed: {

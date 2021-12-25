@@ -11,6 +11,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WorkingHoursController;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +36,14 @@ Route::get('/', function () {
 require __DIR__ . '/auth.php';
 
 Route::get('export', [EventController::class,'exportCSV'])->name('exportcsv');
+
+Route::get('notify', function () {
+    $user = User::first();
+    $event = Event::first();
+
+    $user->notify(new \App\Notifications\NewEventPublished($event,$user));
+
+});
 
 Route::group(['middleware' => 'auth'], function () {
 

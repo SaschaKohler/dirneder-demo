@@ -15,8 +15,7 @@ class Event extends Model
 
     protected $casts = [
         'startTime' => 'datetime: H:i',
-        'endTime' => 'datetime: H:i'
-
+        'endTime' => 'datetime: H:i',
     ];
 
     public function scopeWorkingHoursSum($query,$value)

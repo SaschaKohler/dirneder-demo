@@ -1,5 +1,5 @@
 <template>
-  <employer-layout>
+  <employer-layout :notifications="notifications">
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
         <h5 class="text-h5 font-weight-bold">Dashboard</h5>
@@ -132,11 +132,11 @@
 </template>
 
 <script>
-import EmployerLayout from "../../layouts/EmployerLayout";
+import EmployerLayout from "@/layouts/EmployerLayout";
 
 export default {
   components: {EmployerLayout},
-  props: ["events"],
+  props: ["events","notifications"],
   data: () => ({
     selectedEvent: {
       id: null,

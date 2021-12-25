@@ -24,9 +24,12 @@ new Vue({
       props: {
         title: title => `${title} - Verwaltung`,
         initialPage: JSON.parse(app.dataset.page),
-        resolveComponent: name => require(`./pages/${name}`).default
+        resolveComponent: async name =>  ( await import(`./pages/${name}`)).default
       }
     })
 }).$mount(app);
+
+// the async resolveComponent just loads the js component which you really need
+// no whole bunch loading look at the npx mix output !
 
 InertiaProgress.init({ color: "#fff" });
