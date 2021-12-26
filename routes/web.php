@@ -4,17 +4,11 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeCategoryController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\HelloController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\WorkingHoursController;
-use App\Models\Event;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,7 +30,7 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('export', [EventController::class,'exportCSV'])->name('exportcsv');
+//Route::get('export', [EventController::class,'exportCSV'])->name('exportcsv');
 
 
 Route::group(['middleware' => 'auth'], function () {
@@ -49,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('employer/eventUpdate/{event}',[EmployeeController::class,'eventUpdate'])->name('employer.eventUpdate');
 
     Route::put( 'notification', [NotificationsController::class, 'markAsRead'])->name('notification.markAsRead');
+    Route::put( 'notification/all', [NotificationsController::class, 'markAllAsRead'])->name('notification.markAllAsRead');
 
 
     Route::group(['middleware' => 'adminAuthenticated'], function () {

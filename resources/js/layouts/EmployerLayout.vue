@@ -72,15 +72,14 @@
 
       <div class="d-flex align-center">
         <div class="px-5">
-          <v-menu v-if="notifications.length > 0" max-height="500px">
-            <template v-slot:activator="{ on , attrs }">
+          <v-menu max-height="500px" class="rounded-xl">
+            <template v-slot:activator="{ on }">
 
               <v-badge
                 color="error"
                 overlap
                 :content="notifications.length"
-                v-bind="attrs"
-                v-on="on"
+                :value="notifications.length"
               >
                 <v-icon
                   v-on="on">
@@ -89,24 +88,20 @@
               </v-badge>
             </template>
 
-            <v-list three-line max-width="300px">
-              <template v-for="(item,index) in notifications">
-                <v-subheader
-                  v-if="item.data['Leistung']"
-                  :key="item.data['Leistung']"
-                  v-text="item.data['Leistung']"
-                ></v-subheader>
+            <v-list four-line max-width="300px" class="pb-0">
+              <template v-for="(item) in notifications">
 
-                <v-divider
-                ></v-divider>
 
                 <v-list-item
-                  :key="index"
                 >
                   <v-list-item-content d-flex>
-                    <v-list-item-title>{{ item.data['Kunde'] }} / {{ item.data['Addresse'] }}
+                    <v-list-item-title class="font-weight-bold">{{ item.data['Kunde'] }} / {{ item.data['Leistung'] }}
                     </v-list-item-title>
-                    <v-list-item-subtitle>Termin neu -> {{ item.data['neuer Termin'] }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.data['Addresse'] }}</v-list-item-subtitle>
+
+                    <v-list-item-subtitle>neuer Termin: <span class="red--text text-bold">{{
+                        item.data['neuer Termin']
+                      }}</span></v-list-item-subtitle>
 
                     <v-list-item-action>
                       <v-btn
@@ -119,29 +114,16 @@
                   </v-list-item-content>
 
                 </v-list-item>
+                <v-divider/>
               </template>
+              <v-footer class="d-flex justify-center font-weight-bold" v-if="notifications.length">
+                <v-btn
+                  text-caption
+                  x-small
+                  @click="putToPage('notification.markAllAsRead')">Alle gelesen
+                </v-btn>
+              </v-footer>
             </v-list>
-          </v-menu>
-
-          <v-menu v-else>
-            <template v-slot:activator="{ on }">
-              <v-icon
-                v-on="on"
-              >
-                mdi-bell
-
-              </v-icon>
-            </template>
-            <template>
-              <v-list>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title class="text-sm-caption">Keine neuen Nachrichten</v-list-item-title>
-
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </template>
           </v-menu>
         </div>
         <v-icon dark>mdi-account</v-icon>
@@ -176,7 +158,6 @@ export default {
       miniVariant: false,
       form: this.$inertia.form({
         id: null,
-    //    userId: this.user.id,
       }),
     };
   },
@@ -221,18 +202,21 @@ export default {
     goToPage(page) {
       this.$inertia.visit(this.route(page));
     },
+    putToPage(page) {
+      this.$inertia.put(this.route(page));
+    },
     markAsRead(item) {
-      console.log(item.id)
       this.form.id = item.id
 
-      this.form.put(route('notification.markAsRead') , {
+      this.form.put(route('notification.markAsRead'), {
         preserveScroll: true,
         onSuccess: () => {
           this.form.reset();
         },
       });
-
-    }
-  },
+    },
+  }
 };
+
+
 </script>

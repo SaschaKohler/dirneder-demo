@@ -12,7 +12,6 @@ class NotificationsController extends Controller
 {
     public function markAsRead(Request $request)
     {
-//        $user = User::find(Auth::id());
 
         $notification = DatabaseNotification::findOrFail($request['id']);
 
@@ -20,10 +19,25 @@ class NotificationsController extends Controller
 
        // $user->unreadNotifications->markAsRead();
 
-        return redirect()->back()->with('message', [
-            'type' => 'success',
-            'text' => 'Nacricht gelesen!',
-        ]);
+        return redirect()->back();
+//        ->with('message', [
+//            'type' => 'success',
+//            'text' => 'Nachricht gelesen!',
+//        ]);
+
+    }
+    public function markAllAsRead()
+    {
+
+        $user = User::findOrFail(Auth::id());
+
+        $user->unreadNotifications->markAsRead();
+
+        return redirect()->back();
+//        ->with('message', [
+//            'type' => 'success',
+//            'text' => 'Nachrichten gelesen!',
+//        ]);
 
     }
 }

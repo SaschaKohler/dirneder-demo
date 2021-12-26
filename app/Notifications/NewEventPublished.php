@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
 
 class NewEventPublished extends Notification
 {
@@ -66,7 +67,7 @@ class NewEventPublished extends Notification
     {
         return [
             'Kunde' => $this->event->customer->lastName,
-            'neuer Termin' => $this->event->start,
+            'neuer Termin' => Carbon::parse($this->event->start)->format('d.M y'),
             'Leistung' => $this->event->type,
             'Addresse' => $this->event->customer->street . ' / '
                 . $this->event->customer->PLZ . ' ' . $this->event->customer->city

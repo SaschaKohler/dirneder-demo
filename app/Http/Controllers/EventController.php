@@ -18,6 +18,39 @@ use Illuminate\Support\Carbon;
 class EventController extends Controller
 {
 
+    protected function notify(Request $request,Event $event)
+    {
+        // next we send messages via databank to each employee
+        // here we have to check whether $request->employees comes as an array of array or just as an array of id's
+        // when something changed we get only an array of the id's of each employess -> first foreach
+        // if nothing is updated at the team it comes as an array of each employee  -> second foreach (indexing id)
+
+
+        $employees = $request->employees;
+
+        if (!is_array($employees[0])) {
+
+            foreach ($employees as $employer) {
+
+                $user = User::find($employer);
+
+                $user->notify(new NewEventPublished($event, $user));
+
+            }
+        } else {
+            foreach ($employees as $employer) {
+
+                $user = User::find($employer['id']);
+
+                $user->notify(new NewEventPublished($event, $user));
+
+            }
+        }
+
+
+
+    }
+
     public function index(Request $request)
     {
         $data = Event::when($request->sort_by, function ($query, $value) {
@@ -72,6 +105,7 @@ class EventController extends Controller
         $event->vehicles()->sync($request->vehicles);
         $event->save();
 
+        $this->notify($request,$event);
 
         return redirect()->back()->with('message', [
             'type' => 'success',
@@ -144,30 +178,7 @@ class EventController extends Controller
 
         $event->update($data);
 
-        // next we send messages via databank to each employee
-        // here we have to check whether employees comes as an array in array or just as an array of id's
-        // when something changed we get only an array of the id's of each employess -> first foreach
-        // if nothing is updated at the team it comes as an array of each employee  -> second foreach (indexing id)
-
-
-        if (!is_array($employees[0])) {
-
-            foreach ($employees as $employer) {
-
-                $user = User::find($employer);
-
-                $user->notify(new NewEventPublished($event, $user));
-
-            }
-        } else {
-            foreach ($employees as $employer) {
-
-                $user = User::find($employer['id']);
-
-                $user->notify(new NewEventPublished($event, $user));
-
-            }
-        }
+        $this->notify($request,$event);
 
         return redirect()->back()->with('message', [
             'type' => 'success',
