@@ -72,7 +72,7 @@
 
       <div class="d-flex align-center">
         <div class="px-5">
-          <v-menu v-if="notifications" max-height="500px">
+          <v-menu v-if="notifications.length > 0" max-height="500px">
             <template v-slot:activator="{ on , attrs }">
 
               <v-badge
@@ -99,6 +99,7 @@
 
                 <v-divider
                 ></v-divider>
+
                 <v-list-item
                   :key="index"
                 >
@@ -116,13 +117,32 @@
                       </v-btn>
                     </v-list-item-action>
                   </v-list-item-content>
+
                 </v-list-item>
               </template>
             </v-list>
           </v-menu>
-          <v-icon v-else>
-            mdi-bell
-          </v-icon>
+
+          <v-menu v-else>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                v-on="on"
+              >
+                mdi-bell
+
+              </v-icon>
+            </template>
+            <template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-sm-caption">Keine neuen Nachrichten</v-list-item-title>
+
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </template>
+          </v-menu>
         </div>
         <v-icon dark>mdi-account</v-icon>
         <div class="pl-3">
@@ -154,6 +174,10 @@ export default {
 
       ],
       miniVariant: false,
+      form: this.$inertia.form({
+        id: null,
+    //    userId: this.user.id,
+      }),
     };
   },
   computed: {
@@ -165,6 +189,7 @@ export default {
     },
     indexMenu() {
       const inertiaUrl = this.$inertia.page.url.split("?")[0];
+      console.log(inertiaUrl)
       const index = this.items.findIndex((item) => {
         const windowUrl = this.route(item.to);
         return windowUrl.includes(inertiaUrl);
@@ -198,6 +223,15 @@ export default {
     },
     markAsRead(item) {
       console.log(item.id)
+      this.form.id = item.id
+
+      this.form.put(route('notification.markAsRead') , {
+        preserveScroll: true,
+        onSuccess: () => {
+          this.form.reset();
+        },
+      });
+
     }
   },
 };

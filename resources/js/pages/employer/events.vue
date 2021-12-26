@@ -1,6 +1,6 @@
 <template>
 
-  <employer-layout>
+  <employer-layout :notifications="notifications">
     <v-banner class="mb-4">
       <div class="d-flex flex-wrap justify-space-between">
         <h5 class="text-h5 font-weight-bold">Meine Aufträge</h5>
@@ -136,7 +136,7 @@ import EmployerLayout from "../../layouts/EmployerLayout.vue";
 import {format, parseISO} from 'date-fns'
 
 export default {
-  props: ["items"],// "customers", "employees", "vehicles", "count"],
+  props: ["items","notifications"],
   components: {EmployerLayout},
   data() {
     return {
@@ -235,7 +235,6 @@ export default {
     },
 
     submit() {
-      console.log(this.itemId + " " +this.form.startTime + " " + this.form.endTime)
       this.form.put(route("employer.eventUpdate", this.itemId), {
         preserveScroll: true,
         onSuccess: () => {

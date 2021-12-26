@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -37,13 +38,6 @@ require __DIR__ . '/auth.php';
 
 Route::get('export', [EventController::class,'exportCSV'])->name('exportcsv');
 
-Route::get('notify', function () {
-    $user = User::first();
-    $event = Event::first();
-
-    $user->notify(new \App\Notifications\NewEventPublished($event,$user));
-
-});
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -54,6 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('employer/{user}',[EmployeeController::class,'update'])->name('employer.update');
     Route::put('employer/eventUpdate/{event}',[EmployeeController::class,'eventUpdate'])->name('employer.eventUpdate');
 
+    Route::put( 'notification', [NotificationsController::class, 'markAsRead'])->name('notification.markAsRead');
 
 
     Route::group(['middleware' => 'adminAuthenticated'], function () {

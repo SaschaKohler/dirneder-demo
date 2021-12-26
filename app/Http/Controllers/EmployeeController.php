@@ -11,6 +11,15 @@ use Inertia\Inertia;
 
 class EmployeeController extends Controller
 {
+
+    protected $user;
+
+    public function __construct(User $user)
+    {
+
+    }
+
+
     public function index(Request $request)
     {
         $data = Event::query()->whereHas('employees', function ($query) {
@@ -82,8 +91,13 @@ class EmployeeController extends Controller
             ->with('employees')
             ->with('vehicles')
             ->paginate($request->page_size ?? 10);
+
+        $user = User::find(Auth::id());
+        $notifications = $user->unreadNotifications;
+
         return Inertia::render('employer/events', [
-            'items' => $data
+            'items' => $data,
+            'notifications' => $notifications
         ]);
     }
 

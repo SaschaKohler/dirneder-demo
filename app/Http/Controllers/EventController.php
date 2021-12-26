@@ -95,6 +95,7 @@ class EventController extends Controller
 
         $employees = $request->employees;
         $vehicles = $request->vehicles;
+
 //        $plannedDate = Carbon::createFromFormat('Y-m-d H:i:s', $data['planned'])->format('d-m-Y');
 //        $currentEventId = $event;
 //        $currentEventId->toArray()['id'];
@@ -128,25 +129,10 @@ class EventController extends Controller
 //            ]);
 //        }
 
-
-
-
         if (!is_array($employees[0])) {
-            foreach ($employees as $employer) {
-
-                $user = User::find($employer);
-
-                $user->notify(new NewEventPublished($event,$user));
-
-            }
 
             $event->employees()->sync($request->employees);
             $event->save();
-        } else {
-            $user = User::find($employees[0]['id']);
-
-            $user->notify(new NewEventPublished($event,$user));
-
         }
 
         if (!is_array($vehicles[0])) {
@@ -154,8 +140,34 @@ class EventController extends Controller
             $event->save();
         }
 
+        $event->end = $data['start'];   // put end of event same as start !
 
         $event->update($data);
+
+        // next we send messages via databank to each employee
+        // here we have to check whether employees comes as an array in array or just as an array of id's
+        // when something changed we get only an array of the id's of each employess -> first foreach
+        // if nothing is updated at the team it comes as an array of each employee  -> second foreach (indexing id)
+
+
+        if (!is_array($employees[0])) {
+
+            foreach ($employees as $employer) {
+
+                $user = User::find($employer);
+
+                $user->notify(new NewEventPublished($event, $user));
+
+            }
+        } else {
+            foreach ($employees as $employer) {
+
+                $user = User::find($employer['id']);
+
+                $user->notify(new NewEventPublished($event, $user));
+
+            }
+        }
 
         return redirect()->back()->with('message', [
             'type' => 'success',
