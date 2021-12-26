@@ -25,7 +25,6 @@ class EventController extends Controller
         // when something changed we get only an array of the id's of each employess -> first foreach
         // if nothing is updated at the team it comes as an array of each employee  -> second foreach (indexing id)
 
-
         $employees = $request->employees;
 
         if (!is_array($employees[0])) {
@@ -46,9 +45,6 @@ class EventController extends Controller
 
             }
         }
-
-
-
     }
 
     public function index(Request $request)
@@ -174,7 +170,7 @@ class EventController extends Controller
             $event->save();
         }
 
-        $event->end = $data['start'];   // put end of event same as start !
+        $event->end = $request['start'];   // put end of event same as start !
 
         $event->update($data);
 
