@@ -157,6 +157,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["notifications"],
   data: function data() {
@@ -388,10 +392,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["items", "notifications"],
+  props: ["items", "notifications", "tools"],
   components: {
     EmployerLayout: _layouts_EmployerLayout_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -402,14 +472,12 @@ __webpack_require__.r(__webpack_exports__);
         value: "index",
         sortable: false
       }, {
-        text: "Bezeichner",
-        value: "name"
-      }, {
-        text: "Start",
+        text: "Arbeitstag",
         value: "start"
       }, {
-        text: "Ende",
-        value: "end"
+        text: "Arbeitszeit",
+        value: "workingHours",
+        sortable: false
       }, {
         text: "Leistung",
         value: "type"
@@ -423,6 +491,10 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Fahrzeuge",
         value: "vehicles",
+        sortable: false
+      }, {
+        text: "Werkzeug",
+        value: "tools",
         sortable: false
       }, {
         text: "Actions",
@@ -448,15 +520,19 @@ __webpack_require__.r(__webpack_exports__);
       options: {},
       search: null,
       params: {},
+      calc: 0,
+      selected: [],
+      pivots: [],
       form: this.$inertia.form({
         startTime: null,
-        endTime: null
+        endTime: null,
+        tools: null
       })
     };
   },
   computed: {
     formTitle: function formTitle() {
-      return this.isUpdate ? "Zeiterfassung" : "";
+      return this.isUpdate ? "Zeiterfassung / Geräte" : "";
     },
     dateFormattedStart: function dateFormattedStart() {
       return this.form.start ? (0,date_fns__WEBPACK_IMPORTED_MODULE_1__["default"])((0,date_fns__WEBPACK_IMPORTED_MODULE_2__["default"])(this.form.start), 'dd\.MM\.yyyy') : '';
@@ -492,6 +568,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    addMinutes: function addMinutes() {
+      this.tools.deviceUsePerEvent += .5;
+    },
+    subMinutes: function subMinutes() {
+      this.tools.deviceUsePerEvent -= .5;
+    },
     updateData: function updateData() {
       var _this = this;
 
@@ -505,10 +587,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     editItem: function editItem(item) {
+      console.log(item);
       this.form.clearErrors();
       this.form.name = item.name;
       this.form.startTime = item.startTime;
       this.form.endTime = item.endTime;
+      this.form.tools = item.tools;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;
@@ -549,7 +633,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.v-breadcrumbs[data-v-fd4ad3d8] a {\n  color: green;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.v-breadcrumbs[data-v-fd4ad3d8] a {\n  color: green;\n}\n.v-list-item--active[data-v-fd4ad3d8] {\n  background-color: #EFEBE9;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1008,11 +1092,19 @@ var render = function() {
                         "v-list",
                         {
                           staticClass: "pb-0",
-                          attrs: { "four-line": "", "max-width": "300px" }
+                          attrs: { "five-line": "", "max-width": "300px" }
                         },
                         [
                           _vm._l(_vm.notifications, function(item) {
                             return [
+                              _c("v-subheader", {
+                                domProps: {
+                                  textContent: _vm._s(item.data["subject"])
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
                               _c(
                                 "v-list-item",
                                 [
@@ -1025,16 +1117,16 @@ var render = function() {
                                         { staticClass: "font-weight-bold" },
                                         [
                                           _vm._v(
-                                            _vm._s(item.data["Kunde"]) +
+                                            _vm._s(item.data["customer"]) +
                                               " / " +
-                                              _vm._s(item.data["Leistung"]) +
+                                              _vm._s(item.data["type"]) +
                                               "\n                  "
                                           )
                                         ]
                                       ),
                                       _vm._v(" "),
                                       _c("v-list-item-subtitle", [
-                                        _vm._v(_vm._s(item.data["Addresse"]))
+                                        _vm._v(_vm._s(item.data["address"]))
                                       ]),
                                       _vm._v(" "),
                                       _c("v-list-item-subtitle", [
@@ -1046,7 +1138,23 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              _vm._s(item.data["neuer Termin"])
+                                              _vm._s(item.data["newEvent"])
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-list-item-subtitle", [
+                                        _vm._v("Intervall: "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "primary--text text-bold"
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(item.data["recurrence"])
                                             )
                                           ]
                                         )
@@ -1314,6 +1422,27 @@ var render = function() {
               }
             },
             {
+              key: "item.tools",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c(
+                    "ul",
+                    _vm._l(item.tools, function(item) {
+                      return _c("li", { key: item.id }, [
+                        _vm._v(
+                          _vm._s(item.title) +
+                            " / " +
+                            _vm._s(item.pivot.deviceUsePerEvent)
+                        )
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              }
+            },
+            {
               key: "item.action",
               fn: function(ref) {
                 var item = ref.item
@@ -1332,7 +1461,7 @@ var render = function() {
                       _c("v-icon", { attrs: { small: "" } }, [
                         _vm._v(" mdi-pencil")
                       ]),
-                      _vm._v("\n        Zeiterfassung\n      ")
+                      _vm._v("\n        Zeit / Tools\n      ")
                     ],
                     1
                   )
@@ -1368,31 +1497,79 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-menu",
-                {
-                  ref: "menuStart",
-                  attrs: {
-                    "close-on-content-click": false,
-                    "nudge-right": 40,
-                    transition: "scale-transition",
-                    "offset-y": "",
-                    "min-width": "290px"
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        return [
-                          _c(
-                            "v-text-field",
-                            _vm._g(
-                              {
+                "v-row",
+                { staticClass: "mt-5", attrs: { justify: "center" } },
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [
+                      _c(
+                        "v-menu",
+                        {
+                          ref: "menuStart",
+                          attrs: {
+                            "close-on-content-click": false,
+                            "nudge-right": 40,
+                            transition: "scale-transition",
+                            "offset-y": "",
+                            "min-width": "390px"
+                          },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                return [
+                                  _c(
+                                    "v-text-field",
+                                    _vm._g(
+                                      {
+                                        attrs: {
+                                          label: "Arbeitsbeginn",
+                                          "prepend-icon":
+                                            "mdi-clock-time-four-outline",
+                                          readonly: "",
+                                          color: "brown"
+                                        },
+                                        model: {
+                                          value: _vm.form.startTime,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "startTime", $$v)
+                                          },
+                                          expression: "form.startTime"
+                                        }
+                                      },
+                                      on
+                                    )
+                                  )
+                                ]
+                              }
+                            }
+                          ]),
+                          model: {
+                            value: _vm.menu1,
+                            callback: function($$v) {
+                              _vm.menu1 = $$v
+                            },
+                            expression: "menu1"
+                          }
+                        },
+                        [
+                          _vm._v(" "),
+                          _vm.menu1
+                            ? _c("v-time-picker", {
                                 attrs: {
-                                  label: "Arbeitsbeginn",
-                                  "prepend-icon": "mdi-clock-time-four-outline",
-                                  readonly: "",
-                                  color: "brown"
+                                  "full-width": "",
+                                  "header-color": "grey",
+                                  format: "24hr"
+                                },
+                                on: {
+                                  "click:minute": function($event) {
+                                    return _vm.$refs.menuStart.save(
+                                      _vm.form.startTime
+                                    )
+                                  }
                                 },
                                 model: {
                                   value: _vm.form.startTime,
@@ -1401,75 +1578,85 @@ var render = function() {
                                   },
                                   expression: "form.startTime"
                                 }
-                              },
-                              on
-                            )
-                          )
-                        ]
-                      }
-                    }
-                  ]),
-                  model: {
-                    value: _vm.menu1,
-                    callback: function($$v) {
-                      _vm.menu1 = $$v
-                    },
-                    expression: "menu1"
-                  }
-                },
-                [
+                              })
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _vm.menu1
-                    ? _c("v-time-picker", {
-                        attrs: {
-                          "full-width": "",
-                          "header-color": "grey",
-                          format: "24hr"
-                        },
-                        on: {
-                          "click:minute": function($event) {
-                            return _vm.$refs.menuStart.save(_vm.form.startTime)
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "4" } },
+                    [
+                      _c(
+                        "v-menu",
+                        {
+                          ref: "menuEnd",
+                          attrs: {
+                            "close-on-content-click": false,
+                            "nudge-right": 40,
+                            transition: "scale-transition",
+                            "offset-y": "",
+                            "min-width": "290px"
+                          },
+                          scopedSlots: _vm._u([
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                return [
+                                  _c(
+                                    "v-text-field",
+                                    _vm._g(
+                                      {
+                                        attrs: {
+                                          label: "Arbeitsende",
+                                          "prepend-icon":
+                                            "mdi-clock-time-four-outline",
+                                          readonly: "",
+                                          color: "brown"
+                                        },
+                                        model: {
+                                          value: _vm.form.endTime,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.form, "endTime", $$v)
+                                          },
+                                          expression: "form.endTime"
+                                        }
+                                      },
+                                      on
+                                    )
+                                  )
+                                ]
+                              }
+                            }
+                          ]),
+                          model: {
+                            value: _vm.menu2,
+                            callback: function($$v) {
+                              _vm.menu2 = $$v
+                            },
+                            expression: "menu2"
                           }
                         },
-                        model: {
-                          value: _vm.form.startTime,
-                          callback: function($$v) {
-                            _vm.$set(_vm.form, "startTime", $$v)
-                          },
-                          expression: "form.startTime"
-                        }
-                      })
-                    : _vm._e()
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  ref: "menuEnd",
-                  attrs: {
-                    "close-on-content-click": false,
-                    "nudge-right": 40,
-                    transition: "scale-transition",
-                    "offset-y": "",
-                    "min-width": "290px"
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        return [
-                          _c(
-                            "v-text-field",
-                            _vm._g(
-                              {
+                        [
+                          _vm._v(" "),
+                          _vm.menu2
+                            ? _c("v-time-picker", {
                                 attrs: {
-                                  label: "Arbeitsende",
-                                  "prepend-icon": "mdi-clock-time-four-outline",
-                                  readonly: "",
-                                  color: "brown"
+                                  "full-width": "",
+                                  "header-color": "grey",
+                                  format: "24hr"
+                                },
+                                on: {
+                                  "click:minute": function($event) {
+                                    return _vm.$refs.menuEnd.save(
+                                      _vm.form.endTime
+                                    )
+                                  }
                                 },
                                 model: {
                                   value: _vm.form.endTime,
@@ -1478,45 +1665,197 @@ var render = function() {
                                   },
                                   expression: "form.endTime"
                                 }
-                              },
-                              on
-                            )
-                          )
-                        ]
-                      }
-                    }
-                  ]),
-                  model: {
-                    value: _vm.menu2,
-                    callback: function($$v) {
-                      _vm.menu2 = $$v
-                    },
-                    expression: "menu2"
-                  }
-                },
+                              })
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-container",
                 [
-                  _vm._v(" "),
-                  _vm.menu2
-                    ? _c("v-time-picker", {
-                        attrs: {
-                          "full-width": "",
-                          "header-color": "grey",
-                          format: "24hr"
-                        },
-                        on: {
-                          "click:minute": function($event) {
-                            return _vm.$refs.menuEnd.save(_vm.form.endTime)
-                          }
-                        },
-                        model: {
-                          value: _vm.form.endTime,
-                          callback: function($$v) {
-                            _vm.$set(_vm.form, "endTime", $$v)
-                          },
-                          expression: "form.endTime"
+                  _c("v-select", {
+                    attrs: {
+                      items: _vm.tools,
+                      "item-text": "title",
+                      label: "Werkzeuge",
+                      color: "brown",
+                      "return-object": "",
+                      filled: "",
+                      dense: "",
+                      clearable: "",
+                      chips: "",
+                      multiple: ""
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function(ref) {
+                          var item = ref.item
+                          var index = ref.index
+                          return [
+                            _c(
+                              "v-chip",
+                              {
+                                staticClass: "ma-2",
+                                attrs: {
+                                  "text-color": "white",
+                                  color: "brown",
+                                  label: ""
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(item.title) +
+                                    " / " +
+                                    _vm._s(item.deviceUsePerEvent) +
+                                    " h\n            "
+                                )
+                              ]
+                            )
+                          ]
                         }
-                      })
-                    : _vm._e()
+                      },
+                      {
+                        key: "item",
+                        fn: function(data) {
+                          return [
+                            _c(
+                              "v-list-item",
+                              _vm._g(
+                                _vm._b(
+                                  { attrs: { c: "" } },
+                                  "v-list-item",
+                                  data.attrs,
+                                  false
+                                ),
+                                data.on
+                              ),
+                              [
+                                _c(
+                                  "v-list-item-action",
+                                  [
+                                    _c("v-checkbox", {
+                                      attrs: {
+                                        value: data.attrs.inputValue,
+                                        color: "brown"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c(
+                                      "v-row",
+                                      {
+                                        attrs: {
+                                          "no-gutters": "",
+                                          align: "center"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: { cols: "4", "sm-col": "12" }
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "brown--text text-subtitle-1"
+                                              },
+                                              [_vm._v(_vm._s(data.item.title))]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("v-spacer"),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: { cols: "6", "sm-col": "12" }
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "brown--text text-subtitle-1 font-weight-bold"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    data.item.deviceUsePerEvent
+                                                  ) + " h"
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("v-slider", {
+                                              staticClass: "pt-10",
+                                              attrs: {
+                                                step: "0.5",
+                                                "thumb-label": "",
+                                                min: "0.5",
+                                                max: "8",
+                                                ticks: "",
+                                                color: "brown",
+                                                "thumb-color":
+                                                  "brown lighten-2",
+                                                "track-fill-color":
+                                                  "brown darken-2",
+                                                "track-color": "brown lighten-2"
+                                              },
+                                              model: {
+                                                value:
+                                                  data.item.deviceUsePerEvent,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    data.item,
+                                                    "deviceUsePerEvent",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "data.item.deviceUsePerEvent"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.form.tools,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "tools", $$v)
+                      },
+                      expression: "form.tools"
+                    }
+                  })
                 ],
                 1
               ),

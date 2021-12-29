@@ -18,13 +18,16 @@ class CreateEventTable extends Migration
 
             $table->id();
             $table->string('name');
-            $table->date('start')->default(Carbon::now());
-            $table->date('end')->nullable()->default(Carbon::now());
+            $table->date('start');
+            $table->date('end')->nullable();
             $table->time('startTime')->default(Carbon::parse('07:00')->format('H:I'));
             $table->time('endTime')->nullable()->default(Carbon::parse('07:00')->format('H:I'));
             $table->time('workingHours')->nullable()->default(null);
             $table->string('color');
             $table->string('type');
+            $table->unsignedInteger('recurrence')->default(0);
+            $table->foreignId('event_id')->nullable()->references('id')
+                ->on('events')->onDelete('cascade');
             $table->foreignId('customer_id')->references('id')
                 ->on('customers')->onDelete('cascade');
             $table->text('notes')->nullable();

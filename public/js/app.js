@@ -350,16 +350,6 @@ var map = {
 		"/js/vendor",
 		"resources_js_pages_event_index_vue"
 	],
-	"./event/employerIndex": [
-		"./resources/js/pages/event/employerIndex.vue",
-		"/js/vendor",
-		"resources_js_pages_event_employerIndex_vue"
-	],
-	"./event/employerIndex.vue": [
-		"./resources/js/pages/event/employerIndex.vue",
-		"/js/vendor",
-		"resources_js_pages_event_employerIndex_vue"
-	],
 	"./event/index": [
 		"./resources/js/pages/event/index.vue",
 		"/js/vendor",

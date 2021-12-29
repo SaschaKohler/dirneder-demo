@@ -67,6 +67,15 @@
             color="brown"
             outlined
             dense
+            />
+          <v-text-field
+            v-model="form.branding"
+            label="Firma"
+            :error-messages="form.errors.branding"
+            type="text"
+            color="brown"
+            outlined
+            dense
           />
           <v-text-field
             v-model="form.street"
@@ -166,6 +175,7 @@ export default {
       headers: [
         { text: "No", value: "index", sortable: false },
         { text: "Nachname", value: "lastName" },
+        { text: "Firma", value: "branding" },
         { text: "Strasse", value: "street" },
         { text: "Stadt/Ort", value: "city" },
         { text: "Tel", value: "phone1" },
@@ -196,6 +206,7 @@ export default {
       form: this.$inertia.form({
         firstName: null,
         lastName: null,
+        branding: null,
         street: null,
         city: null,
         PLZ: null,
@@ -249,6 +260,7 @@ export default {
       this.form.clearErrors();
       this.form.firstName = item.firstName;
       this.form.lastName = item.lastName;
+      this.form.branding = item.branding;
       this.form.street = item.street;
       this.form.city = item.city;
       this.form.PLZ = item.PLZ;

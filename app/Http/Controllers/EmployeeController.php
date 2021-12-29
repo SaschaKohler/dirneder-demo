@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Tool;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -40,8 +41,12 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
+        $user = User::findOrFail($id);
+        $notifications = $user->unreadNotifications;
+
         return Inertia::render('employer/edit', [
-            'user' => User::findOrFail($id)
+            'user' => $user,
+            'notifications' => $notifications
         ]);
 
 
@@ -90,6 +95,7 @@ class EmployeeController extends Controller
             ->with('customer')
             ->with('employees')
             ->with('vehicles')
+            ->with('tools')
             ->paginate($request->page_size ?? 10);
 
         $user = User::find(Auth::id());
@@ -97,7 +103,8 @@ class EmployeeController extends Controller
 
         return Inertia::render('employer/events', [
             'items' => $data,
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'tools' => Tool::all(),
         ]);
     }
 
@@ -110,18 +117,34 @@ class EmployeeController extends Controller
 
         ]);
 
-        $workingHours = Carbon::parse($request['endTime'])->diff(Carbon::parse($request['startTime']))->format('%H:%I');
+        $workingHours = Carbon::parse($request['endTime'])->diff(Carbon::parse($request['startTime']))->format('%H:%i');
+        $diff = Carbon::parse($request['endTime'])->diffInHours(Carbon::parse($request['startTime']));
 
-        $event->workingHours = $workingHours;
+        // check for 12hours day and subtract 30 min break!
+        if ($diff >= 12) {
+            $event->workingHours = Carbon::parse($workingHours)->subMinutes(30)->format('H:i');
+
+        } else {
+            $event->workingHours = $workingHours;
+        }
+        $toolsSync = array();
+        foreach($request->tools as $tool)
+            {
+//                $event->tools()->attach($tool['id'],['deviceUsePerEvent' => $tool['deviceUsePerEvent']]);
+//                $toolId[] = $tool['id'];
+//                $toolPivots[] = $tool['deviceUsePerEvent'];
+                $toolsSync[$tool['id']] = ['deviceUsePerEvent' => $tool['deviceUsePerEvent']];
+            }
+
+        $event->tools()->sync($toolsSync);
         $event->save();
 
         $event->update($data);
 
 
-
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Arbeitszeit ' .$workingHours. ' erfasst',
+            'text' => 'Arbeitszeit ' . $workingHours . ' erfasst',
         ]);
     }
 

@@ -89,6 +89,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 :value="dateFormattedStart"
+                :v-model="form.start"
                 label="Termin"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -121,6 +122,17 @@
               </v-btn>
             </v-date-picker>
           </v-menu>
+          <v-select
+            v-model="form.recurrence"
+            :items="recurrence"
+            item-text="type"
+            item-value="id"
+            label="Wiederholung"
+            :error-messages="form.errors.recurrence"
+            color="brown"
+            outlined
+            dense
+          />
           <v-select
             v-model="form.type"
             :items="specials"
@@ -263,12 +275,23 @@ export default {
       params: {},
       specials: ['pers. Termin', 'Gartenpflege', 'Baumpflege', 'Zaunbau', 'Transport', 'Winterdienst', 'Instandsetzung'],
       colors: ['red', 'green', 'green', 'brown', 'blue', 'grey', 'orange'],
+      recurrence: [
+        { id: 0 , type: 'keine'},
+        { id: 1 , type: 'täglich'},
+        { id: 2 , type: 'wöchentlich'},
+        { id: 3 , type: '14 tägig'},
+        { id: 4 , type: 'monatlich'},
+        { id: 5 , type: 'alle 3 Monate'},
+        { id: 6 , type: 'halbjährlich'},
+      ],
+
       form: this.$inertia.form({
         name: null,
         start: null,
         end: null,
         type: null,
         color: 'dirneder',
+        recurrence: null,
         customer_id: null,
         notes: null,
         employees: null,
@@ -281,7 +304,6 @@ export default {
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
     },
     computedColor() {
-      console.log(this.form.type);
 
       switch (this.form.type) {
         case 'pers. Termin':
@@ -356,6 +378,7 @@ export default {
       this.form.end = item.start;
       this.form.type = item.type;
       this.form.color = this.computedColor;
+      this.form.recurrence = item.recurrence;
       this.form.customer_id = item.customer_id;
       this.form.notes = item.notes;
       this.form.employees = item.employees;
@@ -390,6 +413,7 @@ export default {
           },
         });
       } else {
+        this.form.color = this.computedColor;
         this.form.post(route("event.store"), {
           preserveScroll: true,
           onSuccess: () => {

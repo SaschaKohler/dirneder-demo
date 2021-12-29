@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\Employee;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Notifications\NewEventPublished;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Illuminate\Support\Carbon;
 
 
 class EventController extends Controller
@@ -89,11 +85,11 @@ class EventController extends Controller
             'end' => 'nullable',
             'type' => 'required|string',
             'customer_id' => 'required|integer',
+            'recurrence' => 'required',
             'notes' => 'nullable',
             'employees' => 'required|array|min:1',
             'vehicles' => 'required|array|min:1',
         ]);
-
 
         $event = Event::create($data);
         $event->end = $data['start'];
@@ -119,6 +115,7 @@ class EventController extends Controller
             'type' => 'required|string',
             'customer_id' => 'required|integer',
             'notes' => 'nullable',
+            'recurrence' => 'nullable',
             'employees' => 'required|array|min:1',
             'vehicles' => 'required|array|min:1',
         ]);

@@ -88,19 +88,23 @@
               </v-badge>
             </template>
 
-            <v-list four-line max-width="300px" class="pb-0">
+            <v-list five-line max-width="300px" class="pb-0">
               <template v-for="(item) in notifications">
-
-
+                <v-subheader
+                  v-text="item.data['subject']"></v-subheader>
+                  <v-divider></v-divider>
                 <v-list-item
                 >
                   <v-list-item-content d-flex>
-                    <v-list-item-title class="font-weight-bold">{{ item.data['Kunde'] }} / {{ item.data['Leistung'] }}
+                    <v-list-item-title class="font-weight-bold">{{ item.data['customer'] }} / {{ item.data['type'] }}
                     </v-list-item-title>
-                    <v-list-item-subtitle>{{ item.data['Addresse'] }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.data['address'] }}</v-list-item-subtitle>
 
                     <v-list-item-subtitle>neuer Termin: <span class="red--text text-bold">{{
-                        item.data['neuer Termin']
+                        item.data['newEvent']
+                      }}</span></v-list-item-subtitle>
+                    <v-list-item-subtitle>Intervall: <span class="primary--text text-bold">{{
+                        item.data['recurrence']
                       }}</span></v-list-item-subtitle>
 
                     <v-list-item-action>

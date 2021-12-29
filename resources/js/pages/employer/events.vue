@@ -46,12 +46,18 @@
           <li v-for="item in item.vehicles" :key="item.id">{{ item.branding }}</li>
         </ul>
       </template>
+      <template v-slot:item.tools="{ item }">
+        <ul>
+          <li v-for="item in item.tools" :key="item.id">{{ item.title }} / {{ item.pivot.deviceUsePerEvent }}</li>
+        </ul>
+      </template>
 
       <template #[`item.action`]="{ item }">
         <v-btn x-small color="yellow lighten-2" @click="editItem(item)">
           <v-icon small> mdi-pencil</v-icon>
-          Zeiterfassung
+          Zeit / Tools
         </v-btn>
+
 
       </template>
     </v-data-table>
@@ -59,67 +65,127 @@
       v-model="dialog"
       max-width="600px"
     >
-      <v-card >
-        <v-toolbar dense dark color="brown" >{{formTitle}}</v-toolbar>
-        <v-menu
-          ref="menuStart"
-          v-model="menu1"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          transition="scale-transition"
-          offset-y
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="form.startTime"
-              label="Arbeitsbeginn"
-              prepend-icon="mdi-clock-time-four-outline"
-              readonly
-              color="brown"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-time-picker
-            v-if="menu1"
-            v-model="form.startTime"
-            full-width
-            header-color="grey"
-            format="24hr"
-            @click:minute="$refs.menuStart.save(form.startTime)"
-          ></v-time-picker>
-        </v-menu>
-
-          <v-menu
-            ref="menuEnd"
-            v-model="menu2"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
+      <v-card>
+        <v-toolbar dense dark color="brown">{{ formTitle }}</v-toolbar>
+        <v-row class="mt-5" justify="center">
+          <v-col cols="4">
+            <v-menu
+              ref="menuStart"
+              v-model="menu1"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="390px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="form.startTime"
+                  label="Arbeitsbeginn"
+                  prepend-icon="mdi-clock-time-four-outline"
+                  readonly
+                  color="brown"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                v-if="menu1"
+                v-model="form.startTime"
+                full-width
+                header-color="grey"
+                format="24hr"
+                @click:minute="$refs.menuStart.save(form.startTime)"
+              ></v-time-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="4">
+            <v-menu
+              ref="menuEnd"
+              v-model="menu2"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="form.endTime"
+                  label="Arbeitsende"
+                  prepend-icon="mdi-clock-time-four-outline"
+                  readonly
+                  color="brown"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                v-if="menu2"
                 v-model="form.endTime"
-                label="Arbeitsende"
-                prepend-icon="mdi-clock-time-four-outline"
-                readonly
-                color="brown"
-                v-on="on"
-              ></v-text-field>
+                full-width
+                header-color="grey"
+                format="24hr"
+                @click:minute="$refs.menuEnd.save(form.endTime)"
+              ></v-time-picker>
+
+
+            </v-menu>
+          </v-col>
+
+        </v-row>
+
+        <v-container>
+          <v-select
+            v-model="form.tools"
+            :items="tools"
+            item-text="title"
+            label="Werkzeuge"
+            color="brown"
+            return-object
+            filled dense clearable chips multiple
+          >
+            <template v-slot:selection="{ item, index }">
+              <v-chip text-color="white" color="brown" label class="ma-2"
+              >{{ item.title }} / {{ item.deviceUsePerEvent }} h
+              </v-chip>
             </template>
-            <v-time-picker
-              v-if="menu2"
-              v-model="form.endTime"
-              full-width
-              header-color="grey"
-              format="24hr"
-              @click:minute="$refs.menuEnd.save(form.endTime)"
-            ></v-time-picker>
-          </v-menu>
-          <v-card-actions>
-        <v-btn :disabled="form.processing" text color="error" @click="dialog = false">Abbrechen</v-btn>
+            <template v-slot:item="data">
+              <v-list-item v-on="data.on" v-bind="data.attrs" c>
+                <v-list-item-action>
+                  <v-checkbox :value="data.attrs.inputValue" color="brown"></v-checkbox>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-row no-gutters align="center">
+                      <v-col cols="4" sm-col="12">
+                      <span class="brown--text text-subtitle-1">{{ data.item.title }}</span>
+                      </v-col>
+                      <v-spacer></v-spacer>
+                      <v-col cols="6" sm-col="12">
+                      <span class="brown--text text-subtitle-1 font-weight-bold">{{ data.item.deviceUsePerEvent }} h</span>
+                        <v-slider
+                          v-model="data.item.deviceUsePerEvent"
+                          step="0.5"
+                          thumb-label
+                          min="0.5"
+                          max="8"
+                          ticks
+                          color="brown"
+                          thumb-color="brown lighten-2"
+                          track-fill-color="brown darken-2"
+                          track-color="brown lighten-2"
+                          class="pt-10"
+                        ></v-slider>
+                      </v-col>
+
+                    </v-row>
+                </v-list-item-content>
+              </v-list-item>
+
+            </template>
+
+          </v-select>
+        </v-container>
+        <v-card-actions>
+          <v-btn :disabled="form.processing" text color="error" @click="dialog = false">Abbrechen</v-btn>
           <v-spacer/>
           <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
           >Speichern
@@ -136,19 +202,19 @@ import EmployerLayout from "../../layouts/EmployerLayout.vue";
 import {format, parseISO} from 'date-fns'
 
 export default {
-  props: ["items","notifications"],
+  props: ["items", "notifications", "tools"],
   components: {EmployerLayout},
   data() {
     return {
       headers: [
         {text: "No", value: "index", sortable: false},
-        {text: "Bezeichner", value: "name"},
-        {text: "Start", value: "start"},
-        {text: "Ende", value: "end"},
+        {text: "Arbeitstag", value: "start"},
+        {text: "Arbeitszeit", value: "workingHours", sortable: false},
         {text: "Leistung", value: "type"},
         {text: "Kunde", value: "customer_id"},
         {text: "Mitarbeiter", value: "employees", sortable: false},
         {text: "Fahrzeuge", value: "vehicles", sortable: false},
+        {text: "Werkzeug", value: "tools", sortable: false},
         {text: "Actions", value: "action", sortable: false},
       ],
       breadcrumbs: [
@@ -164,8 +230,8 @@ export default {
         },
       ],
       dialog: false,
-      menu1:false,
-      menu2:false,
+      menu1: false,
+      menu2: false,
       isUpdate: false,
       isLoading: false,
       isLoadingTable: false,
@@ -173,15 +239,19 @@ export default {
       options: {},
       search: null,
       params: {},
+      calc: 0,
+      selected: [],
+      pivots: [],
       form: this.$inertia.form({
         startTime: null,
         endTime: null,
+        tools: null,
       }),
     };
   },
   computed: {
     formTitle() {
-      return this.isUpdate ? "Zeiterfassung" : "";
+      return this.isUpdate ? "Zeiterfassung / Geräte" : "";
     },
     dateFormattedStart() {
       return this.form.start ? format(parseISO(this.form.start), 'dd\.MM\.yyyy') : ''
@@ -214,6 +284,13 @@ export default {
     },
   },
   methods: {
+    addMinutes() {
+      this.tools.deviceUsePerEvent += .5;
+    },
+    subMinutes() {
+      this.tools.deviceUsePerEvent -= .5;
+    },
+
     updateData() {
       this.isLoadingTable = true
       this.$inertia.get("/employer/events", this.params, {
@@ -225,10 +302,12 @@ export default {
       });
     },
     editItem(item) {
+      console.log(item)
       this.form.clearErrors();
       this.form.name = item.name;
       this.form.startTime = item.startTime;
       this.form.endTime = item.endTime;
+      this.form.tools = item.tools;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;
@@ -254,5 +333,8 @@ export default {
 <style scoped>
 .v-breadcrumbs >>> a {
   color: green;
+}
+.v-list-item--active {
+  background-color: #EFEBE9;
 }
 </style>

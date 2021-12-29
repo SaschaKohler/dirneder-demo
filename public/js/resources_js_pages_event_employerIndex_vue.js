@@ -378,9 +378,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["items", "customers", "employees"],
@@ -397,11 +394,8 @@ __webpack_require__.r(__webpack_exports__);
         text: "Bezeichner",
         value: "name"
       }, {
-        text: "Beginn",
+        text: "Arbeitstag",
         value: "start"
-      }, {
-        text: "Ende",
-        value: "end"
       }, {
         text: "Leistung",
         value: "type"
@@ -411,9 +405,6 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Mitarbeiter",
         value: "employees"
-      }, {
-        text: "Angelegt",
-        value: "created_at"
       }, {
         text: "Actions",
         value: "action",
@@ -1081,13 +1072,6 @@ var render = function() {
                 return [
                   _c("span", [_vm._v(_vm._s(item.start.substring(0, 10)))])
                 ]
-              }
-            },
-            {
-              key: "item.end",
-              fn: function(ref) {
-                var item = ref.item
-                return [_c("span", [_vm._v(_vm._s(item.end.substring(0, 10)))])]
               }
             },
             {

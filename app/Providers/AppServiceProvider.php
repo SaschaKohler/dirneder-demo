@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Event;
+use App\Observers\RecurrenceObserver;
 use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
                 'message' => Session::get('message'),
             ];
         });
+
+        Event::observe(RecurrenceObserver::class);   // Observer registerd for reccurence in Events!
 
     }
 }

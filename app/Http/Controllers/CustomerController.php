@@ -32,13 +32,14 @@ class CustomerController extends Controller
         $data = $this->validate($request, [
             'firstName' => 'required|string',
             'lastName' => 'required|string',
+            'branding' => 'nullable',
             'street' => 'required|string',
             'city' => 'required|string',
             'PLZ' => 'required|numeric',
             'email' => 'required|email',
             'phone1' => 'required|string',
             'phone2' => 'nullable|string',
-            'notes' => 'required|string'
+            'notes' => 'nullable|string'
         ]);
         Customer::create($data);
         return redirect()->back()->with('message', [
@@ -52,6 +53,7 @@ class CustomerController extends Controller
         $data = $this->validate($request, [
             'firstName' => 'required|string',
             'lastName' => 'required|string',
+            'branding' => 'nullable',
             'street' => 'required|string',
             'city' => 'required|string',
             'PLZ' => 'required|string',
@@ -63,7 +65,7 @@ class CustomerController extends Controller
         $customer->update($data);
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Success edit customer!',
+            'text' => 'Datensatz geändert!',
         ]);
     }
 
@@ -72,7 +74,7 @@ class CustomerController extends Controller
         $customer->delete();
         return redirect()->back()->with('message', [
             'type' => 'success',
-            'text' => 'Success delete customer!',
+            'text' => 'Datensatz gelöscht!',
         ]);
     }
 }

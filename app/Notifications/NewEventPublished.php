@@ -16,7 +16,7 @@ class NewEventPublished extends Notification
 
     protected $event;
     protected $user;
-
+    protected $recur;
     /**
      * Create a new notification instance.
      *
@@ -65,12 +65,41 @@ class NewEventPublished extends Notification
      */
     public function toArray($notifiable)
     {
+
+        switch ($this->event->recurrence) {
+            case 0 :
+                $this->recur = 'keine';
+                break;
+            case 1 :
+                $this->recur = 'täglich';
+                break;
+            case 2 :
+                $this->recur = 'wöchentlich';
+                break;
+            case 3 :
+                $this->recur = '14 tägig';
+                break;
+            case 4 :
+                $this->recur = 'monatlich';
+                break;
+            case 5 :
+                $this->recur = 'alle 3 Monate';
+                break;
+            case 6 :
+                $this->recur = 'halbjährlich';
+                break;
+            default:
+                $this->recur = 'keine';
+        }
+
         return [
-            'Kunde' => $this->event->customer->lastName,
-            'neuer Termin' => Carbon::parse($this->event->start)->format('d.M y'),
-            'Leistung' => $this->event->type,
-            'Addresse' => $this->event->customer->street . ' / '
-                . $this->event->customer->PLZ . ' ' . $this->event->customer->city
+            'subject' => 'Update',
+            'customer' => $this->event->customer->lastName,
+            'newEvent' => Carbon::parse($this->event->start)->format('d.M y'),
+            'type' => $this->event->type,
+            'address' => $this->event->customer->street . ' / '
+                . $this->event->customer->PLZ . ' ' . $this->event->customer->city,
+            'recurrence' => $this->recur
         ];
     }
 }

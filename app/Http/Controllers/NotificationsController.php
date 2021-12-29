@@ -17,13 +17,7 @@ class NotificationsController extends Controller
 
         $notification->markAsRead();
 
-       // $user->unreadNotifications->markAsRead();
-
-        return redirect()->back();
-//        ->with('message', [
-//            'type' => 'success',
-//            'text' => 'Nachricht gelesen!',
-//        ]);
+        return redirect()->back();     // we don't need a message 'cause of the vuetify badge + counter
 
     }
     public function markAllAsRead()
@@ -31,13 +25,9 @@ class NotificationsController extends Controller
 
         $user = User::findOrFail(Auth::id());
 
-        $user->unreadNotifications->markAsRead();
+        $user->unreadNotifications->markAsRead();   // batch mark !
 
-        return redirect()->back();
-//        ->with('message', [
-//            'type' => 'success',
-//            'text' => 'Nachrichten gelesen!',
-//        ]);
+        return redirect()->back();   // we don't need a message 'cause of the vuetify badge + counter
 
     }
 }

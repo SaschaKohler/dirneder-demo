@@ -17,4 +17,5 @@ mix.js('resources/js/app.js', 'public/js')
   .extract()    // extract vendor.js & manifest.js from the app.js code -> caching -> better performance
   .vue()
   .sass('resources/sass/app.scss', 'public/css')
+//  .postCss('resources/css/app.css', 'public/css')
   .webpackConfig(webpackConfig)   // create alis lik '@' for components to load in vue files

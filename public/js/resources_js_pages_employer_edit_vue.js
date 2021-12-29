@@ -157,6 +157,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["notifications"],
   data: function data() {
@@ -370,7 +374,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     EmployerLayout: _layouts_EmployerLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ["user"],
+  props: ["user", "notifications"],
   data: function data() {
     return {
       breadcrumbs: [{
@@ -903,11 +907,19 @@ var render = function() {
                         "v-list",
                         {
                           staticClass: "pb-0",
-                          attrs: { "four-line": "", "max-width": "300px" }
+                          attrs: { "five-line": "", "max-width": "300px" }
                         },
                         [
                           _vm._l(_vm.notifications, function(item) {
                             return [
+                              _c("v-subheader", {
+                                domProps: {
+                                  textContent: _vm._s(item.data["subject"])
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("v-divider"),
+                              _vm._v(" "),
                               _c(
                                 "v-list-item",
                                 [
@@ -920,16 +932,16 @@ var render = function() {
                                         { staticClass: "font-weight-bold" },
                                         [
                                           _vm._v(
-                                            _vm._s(item.data["Kunde"]) +
+                                            _vm._s(item.data["customer"]) +
                                               " / " +
-                                              _vm._s(item.data["Leistung"]) +
+                                              _vm._s(item.data["type"]) +
                                               "\n                  "
                                           )
                                         ]
                                       ),
                                       _vm._v(" "),
                                       _c("v-list-item-subtitle", [
-                                        _vm._v(_vm._s(item.data["Addresse"]))
+                                        _vm._v(_vm._s(item.data["address"]))
                                       ]),
                                       _vm._v(" "),
                                       _c("v-list-item-subtitle", [
@@ -941,7 +953,23 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              _vm._s(item.data["neuer Termin"])
+                                              _vm._s(item.data["newEvent"])
+                                            )
+                                          ]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("v-list-item-subtitle", [
+                                        _vm._v("Intervall: "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "primary--text text-bold"
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(item.data["recurrence"])
                                             )
                                           ]
                                         )
@@ -1082,6 +1110,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "employer-layout",
+    { attrs: { notifications: _vm.notifications } },
     [
       _c("v-banner", { staticClass: "mb-4" }, [
         _c(

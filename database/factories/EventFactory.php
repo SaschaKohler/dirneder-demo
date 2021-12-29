@@ -24,7 +24,7 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $start = $this->faker->dateTimeBetween('now','+1days');
+        $start = $this->faker->dateTime();
         $end = $this->faker->dateTimeBetween($start,'+2 day');
 
         $type = array(
@@ -41,11 +41,13 @@ class EventFactory extends Factory
 
         return [
             'name' => $this->faker->jobTitle,
-            'start' => $start,
-            'end' => $end,
+            'start' => Carbon::now(),
+            'end' => Carbon::now(),
             'color'=>  $v,
             'type' => $k,
-            'customer_id' => random_int(1,5)
+            'recurrence' => 0,
+            'customer_id' => random_int(1,5),
+            'event_id' => null
         ];
     }
 }

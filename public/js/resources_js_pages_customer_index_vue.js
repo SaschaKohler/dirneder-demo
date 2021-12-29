@@ -356,6 +356,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["items"],
@@ -371,6 +380,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Nachname",
         value: "lastName"
+      }, {
+        text: "Firma",
+        value: "branding"
       }, {
         text: "Strasse",
         value: "street"
@@ -409,6 +421,7 @@ __webpack_require__.r(__webpack_exports__);
       form: this.$inertia.form({
         firstName: null,
         lastName: null,
+        branding: null,
         street: null,
         city: null,
         PLZ: null,
@@ -466,6 +479,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.clearErrors();
       this.form.firstName = item.firstName;
       this.form.lastName = item.lastName;
+      this.form.branding = item.branding;
       this.form.street = item.street;
       this.form.city = item.city;
       this.form.PLZ = item.PLZ;
@@ -1136,6 +1150,24 @@ var render = function() {
                         _vm.$set(_vm.form, "lastName", $$v)
                       },
                       expression: "form.lastName"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    attrs: {
+                      label: "Firma",
+                      "error-messages": _vm.form.errors.branding,
+                      type: "text",
+                      color: "brown",
+                      outlined: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.form.branding,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "branding", $$v)
+                      },
+                      expression: "form.branding"
                     }
                   }),
                   _vm._v(" "),

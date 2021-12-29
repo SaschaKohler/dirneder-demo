@@ -421,6 +421,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -481,12 +493,35 @@ __webpack_require__.r(__webpack_exports__);
       params: {},
       specials: ['pers. Termin', 'Gartenpflege', 'Baumpflege', 'Zaunbau', 'Transport', 'Winterdienst', 'Instandsetzung'],
       colors: ['red', 'green', 'green', 'brown', 'blue', 'grey', 'orange'],
+      recurrence: [{
+        id: 0,
+        type: 'keine'
+      }, {
+        id: 1,
+        type: 'täglich'
+      }, {
+        id: 2,
+        type: 'wöchentlich'
+      }, {
+        id: 3,
+        type: '14 tägig'
+      }, {
+        id: 4,
+        type: 'monatlich'
+      }, {
+        id: 5,
+        type: 'alle 3 Monate'
+      }, {
+        id: 6,
+        type: 'halbjährlich'
+      }],
       form: this.$inertia.form({
         name: null,
         start: null,
         end: null,
         type: null,
         color: 'dirneder',
+        recurrence: null,
         customer_id: null,
         notes: null,
         employees: null,
@@ -499,8 +534,6 @@ __webpack_require__.r(__webpack_exports__);
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
     },
     computedColor: function computedColor() {
-      console.log(this.form.type);
-
       switch (this.form.type) {
         case 'pers. Termin':
           return this.colors[0];
@@ -585,6 +618,7 @@ __webpack_require__.r(__webpack_exports__);
       this.form.end = item.start;
       this.form.type = item.type;
       this.form.color = this.computedColor;
+      this.form.recurrence = item.recurrence;
       this.form.customer_id = item.customer_id;
       this.form.notes = item.notes;
       this.form.employees = item.employees;
@@ -624,6 +658,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       } else {
+        this.form.color = this.computedColor;
         this.form.post(route("event.store"), {
           preserveScroll: true,
           onSuccess: function onSuccess() {
@@ -1380,6 +1415,7 @@ var render = function() {
                                   {
                                     attrs: {
                                       value: _vm.dateFormattedStart,
+                                      "v-model": _vm.form.start,
                                       label: "Termin",
                                       "prepend-icon": "mdi-calendar",
                                       readonly: "",
@@ -1455,6 +1491,26 @@ var render = function() {
                     ],
                     1
                   ),
+                  _vm._v(" "),
+                  _c("v-select", {
+                    attrs: {
+                      items: _vm.recurrence,
+                      "item-text": "type",
+                      "item-value": "id",
+                      label: "Wiederholung",
+                      "error-messages": _vm.form.errors.recurrence,
+                      color: "brown",
+                      outlined: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.form.recurrence,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "recurrence", $$v)
+                      },
+                      expression: "form.recurrence"
+                    }
+                  }),
                   _vm._v(" "),
                   _c("v-select", {
                     attrs: {
