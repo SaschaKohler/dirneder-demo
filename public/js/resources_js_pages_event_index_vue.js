@@ -433,6 +433,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1565,6 +1567,7 @@ var render = function() {
                       clearable: "",
                       color: "brown",
                       "item-color": "brown",
+                      "return-object": "",
                       hint: "Mitarbeiter auswählen",
                       "persistent-hint": ""
                     },
@@ -1591,6 +1594,7 @@ var render = function() {
                       dense: "",
                       outlined: "",
                       clearable: "",
+                      "return-object": "",
                       color: "brown",
                       "item-color": "brown",
                       hint: "Fahrzeuge auswählen",

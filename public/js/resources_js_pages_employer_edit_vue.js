@@ -161,6 +161,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["notifications"],
   data: function data() {
@@ -257,8 +268,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _layouts_EmployerLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../layouts/EmployerLayout */ "./resources/js/layouts/EmployerLayout.vue");
-//
-//
 //
 //
 //
@@ -869,30 +878,48 @@ var render = function() {
                   _c(
                     "v-menu",
                     {
-                      staticClass: "rounded-xl",
-                      attrs: { "max-height": "500px" },
+                      attrs: {
+                        bottom: "",
+                        left: "",
+                        "offset-y": "",
+                        origin: "top right",
+                        transition: "scale-transition"
+                      },
                       scopedSlots: _vm._u([
                         {
                           key: "activator",
                           fn: function(ref) {
+                            var attrs = ref.attrs
                             var on = ref.on
                             return [
                               _c(
-                                "v-badge",
-                                {
-                                  attrs: {
-                                    color: "error",
-                                    overlap: "",
-                                    content: _vm.notifications.length,
-                                    value: _vm.notifications.length
-                                  }
-                                },
+                                "v-btn",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "ml-2",
+                                      attrs: { "min-width": "0", text: "" }
+                                    },
+                                    "v-btn",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
+                                ),
                                 [
-                                  _c("v-icon", _vm._g({}, on), [
-                                    _vm._v(
-                                      "\n                mdi-bell\n              "
-                                    )
-                                  ])
+                                  _c(
+                                    "v-badge",
+                                    {
+                                      attrs: {
+                                        color: "red",
+                                        overlap: "",
+                                        content: _vm.notifications.length,
+                                        value: _vm.notifications.length
+                                      }
+                                    },
+                                    [_c("v-icon", [_vm._v("mdi-bell")])],
+                                    1
+                                  )
                                 ],
                                 1
                               )
@@ -907,7 +934,11 @@ var render = function() {
                         "v-list",
                         {
                           staticClass: "pb-0",
-                          attrs: { "five-line": "", "max-width": "300px" }
+                          attrs: {
+                            "five-line": "",
+                            flat: "",
+                            "max-width": "300px"
+                          }
                         },
                         [
                           _vm._l(_vm.notifications, function(item) {
@@ -1342,20 +1373,6 @@ var render = function() {
                   _c(
                     "v-card-actions",
                     [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            disabled: _vm.form.processing,
-                            text: "",
-                            color: "error"
-                          }
-                        },
-                        [_vm._v("Abbrechen")]
-                      ),
-                      _vm._v(" "),
-                      _c("v-spacer"),
-                      _vm._v(" "),
                       _c(
                         "v-btn",
                         {

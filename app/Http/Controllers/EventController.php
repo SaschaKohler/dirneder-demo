@@ -92,9 +92,22 @@ class EventController extends Controller
         ]);
 
         $event = Event::create($data);
+
+        $vehicleIds = array();
+        $employeeIds =array();
+
+        // <v-select>  returns whole object in order to reference working days maybe
+        foreach ($request->employees as $employee) {
+            $employeeIds[] = $employee['id'];
+        }
+
+        foreach ($request->vehicles as $vehicle) {
+            $vehicleIds[] = $vehicle['id'];
+        }
+
         $event->end = $data['start'];
-        $event->employees()->sync($request->employees);
-        $event->vehicles()->sync($request->vehicles);
+        $event->employees()->sync($employeeIds);
+        $event->vehicles()->sync($vehicleIds);
         $event->save();
 
         $this->notify($request,$event);

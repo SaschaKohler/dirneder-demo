@@ -133,6 +133,7 @@
 
         </v-row>
 
+        <!-- without setting item-text active-class error on items ( all active even only one selected)!-->
         <v-container>
           <v-select
             v-model="form.tools"
@@ -202,7 +203,7 @@ import EmployerLayout from "../../layouts/EmployerLayout.vue";
 import {format, parseISO} from 'date-fns'
 
 export default {
-  props: ["items", "notifications", "tools"],
+  props: ["items", "notifications", "tools","count"],
   components: {EmployerLayout},
   data() {
     return {

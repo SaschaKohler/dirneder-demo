@@ -168,6 +168,7 @@
             color="brown"
             item-color="brown"
             class="mt-2 mb-3"
+            return-object
             hint="Mitarbeiter auswählen"
             persistent-hint
           ></v-select>
@@ -184,6 +185,7 @@
             dense
             outlined
             clearable
+            return-object
             color="brown"
             item-color="brown"
             class="mt-2 mb-3"

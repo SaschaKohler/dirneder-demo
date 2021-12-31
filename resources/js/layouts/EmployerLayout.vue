@@ -72,23 +72,34 @@
 
       <div class="d-flex align-center">
         <div class="px-5">
-          <v-menu max-height="500px" class="rounded-xl">
-            <template v-slot:activator="{ on }">
+          <v-menu
+            bottom
+            left
+            offset-y
+            origin="top right"
+            transition="scale-transition"
+          >
+            <template v-slot:activator="{ attrs,on }">
 
-              <v-badge
-                color="error"
-                overlap
-                :content="notifications.length"
-                :value="notifications.length"
-              >
-                <v-icon
-                  v-on="on">
-                  mdi-bell
-                </v-icon>
+              <v-btn
+                class="ml-2"
+                min-width="0"
+                text
+                v-bind="attrs"
+                v-on="on"
+                >
+                   <v-badge
+                     color="red"
+                     overlap
+                    :content="notifications.length"
+                    :value="notifications.length"
+                  >
+                <v-icon>mdi-bell</v-icon>
               </v-badge>
+              </v-btn>
             </template>
 
-            <v-list five-line max-width="300px" class="pb-0">
+            <v-list five-line flat max-width="300px" class="pb-0">
               <template v-for="(item) in notifications">
                 <v-subheader
                   v-text="item.data['subject']"></v-subheader>

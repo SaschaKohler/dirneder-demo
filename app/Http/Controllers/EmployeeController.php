@@ -110,12 +110,15 @@ class EmployeeController extends Controller
 
     public function eventUpdate(Request $request, Event $event)
     {
+
+        // no validation for the tool object 'cause it's a <v-slider>
         $data = $this->validate($request, [
 
             'startTime' => 'required|date_format:H:i',
             'endTime' => 'required|date_format:H:i',
 
         ]);
+
 
         $workingHours = Carbon::parse($request['endTime'])->diff(Carbon::parse($request['startTime']))->format('%H:%i');
         $diff = Carbon::parse($request['endTime'])->diffInHours(Carbon::parse($request['startTime']));
@@ -128,14 +131,13 @@ class EmployeeController extends Controller
             $event->workingHours = $workingHours;
         }
         $toolsSync = array();
+
+        // make an array for the sync  [ $id's , 'pivotTableName' => $value's]
         foreach($request->tools as $tool)
             {
-//                $event->tools()->attach($tool['id'],['deviceUsePerEvent' => $tool['deviceUsePerEvent']]);
-//                $toolId[] = $tool['id'];
-//                $toolPivots[] = $tool['deviceUsePerEvent'];
                 $toolsSync[$tool['id']] = ['deviceUsePerEvent' => $tool['deviceUsePerEvent']];
             }
-
+        // let the sync happen
         $event->tools()->sync($toolsSync);
         $event->save();
 

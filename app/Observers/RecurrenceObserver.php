@@ -74,10 +74,19 @@ class RecurrenceObserver
 
                 }
 
+            $employeeIds = array();
+            $vehiclesIds = array();
+
+            foreach (static::$request->employees as $employee){
+                $employeeIds[] = $employee['id'];
+            }
+            foreach (static::$request->vehicles as $vehicle){
+                $vehicleIds[] = $vehicle['id'];
+            }
 
             foreach ($event->events as $item) {  // iterate childEvents and sync the mana-to-many-relationships accordingly
-                $item->employees()->sync(static::$request->employees);
-                $item->vehicles()->sync(static::$request->vehicles);
+                $item->employees()->sync($employeeIds);
+                $item->vehicles()->sync($vehicleIds);
                 $item->save();
 
             }
@@ -89,28 +98,26 @@ class RecurrenceObserver
 
     public function updated(Event $event)
     {
-        if($event->events()->exists() || $event->event)
-        {
+        if ($event->events()->exists() || $event->event) {
             $startTime = Carbon::parse($event->getOriginal('start'))->diffInSeconds($event->start, false);
             $endTime = Carbon::parse($event->getOriginal('end'))->diffInSeconds($event->end, false);
-            if($event->event)
+            if ($event->event)
                 $childEvents = $event->event->events()->whereDate('start', '>', $event->getOriginal('start'))->get();
             else
                 $childEvents = $event->events;
 
-            foreach($childEvents as $childEvent)
-            {
-                if($startTime)
+            foreach ($childEvents as $childEvent) {
+                if ($startTime)
                     $childEvent->start = Carbon::parse($childEvent->start)->addSeconds($startTime);
                 //if($endTime)
-                    $childEvent->end = $childEvent->start;//Carbon::parse($childEvent->end)->addSeconds($endTime);
-                if($event->isDirty('name') && $childEvent->name == $event->getOriginal('name'))
+                $childEvent->end = $childEvent->start;//Carbon::parse($childEvent->end)->addSeconds($endTime);
+                if ($event->isDirty('name') && $childEvent->name == $event->getOriginal('name'))
                     $childEvent->name = $event->name;
                 $childEvent->saveQuietly();
             }
         }
 
-        if($event->isDirty('recurrence') && $event->recurrence != 0)
+        if ($event->isDirty('recurrence') && $event->recurrence != 0)
             self::created($event);
     }
 

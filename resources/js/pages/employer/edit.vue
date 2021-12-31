@@ -97,8 +97,6 @@
             <div class="d-flex"></div>
           </v-card-text>
           <v-card-actions>
-            <v-btn :disabled="form.processing" text color="error">Abbrechen</v-btn>
-            <v-spacer/>
             <v-btn :loading="form.processing" color="dirneder white--text" @click="submit"
             >Speichern
             </v-btn
@@ -115,7 +113,7 @@ import EmployerLayout from "../../layouts/EmployerLayout";
 
 export default {
   components: {EmployerLayout},
-  props: ["user","notifications"],
+  props: ["user", "notifications"],
   data() {
     return {
 
