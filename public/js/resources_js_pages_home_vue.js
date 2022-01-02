@@ -337,6 +337,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -1076,7 +1078,11 @@ var render = function() {
                   attrs: {
                     "close-on-content-click": false,
                     activator: _vm.selectedElement,
-                    "offset-x": ""
+                    bottom: "",
+                    left: "",
+                    "offset-y": "",
+                    origin: "top right",
+                    transition: "scale-transition"
                   },
                   model: {
                     value: _vm.selectedOpen,
@@ -1107,7 +1113,27 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("div", { staticClass: "flex-grow-1" })
+                          _c("div", { staticClass: "flex-grow-1" }),
+                          _vm._v(" "),
+                          _c("spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { fab: "", color: "brown", depressed: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.selectedOpen = false
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { flat: "" } }, [
+                                _vm._v("mdi-close")
+                              ])
+                            ],
+                            1
+                          )
                         ],
                         1
                       ),
@@ -1224,25 +1250,6 @@ var render = function() {
                                 2
                               )
                             ]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { text: "", color: "secondary" },
-                              on: {
-                                click: function($event) {
-                                  _vm.selectedOpen = false
-                                }
-                              }
-                            },
-                            [_vm._v("\n              Cancel\n            ")]
                           )
                         ],
                         1

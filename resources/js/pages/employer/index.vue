@@ -10,7 +10,7 @@
       <v-sheet
         tile
         height="54"
-        class="d-flex"
+        class="d-flex justify-center"
       >
         <v-btn
           icon
@@ -30,7 +30,12 @@
           hide-details
           class="ma-2"
           label="Typ"
+          style="max-width:150px"
         ></v-select>
+
+        <v-toolbar-title class="text-center pt-2 text-h4" v-if="$refs.calendar" style="width:300px">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
         <v-select
           v-model="weekday"
           :items="weekdays"
@@ -40,11 +45,8 @@
           color="brown"
           label="Wochentage"
           class="ma-2"
-        ></v-select>
-        <v-toolbar-title class="pt-3 pl-3" v-if="$refs.calendar">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
+          style="max-width:150px"
+        />
         <v-btn
           icon
           class="ma-2"

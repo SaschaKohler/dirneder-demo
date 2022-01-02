@@ -9,8 +9,9 @@ class Vehicle extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $casts = [
-        'inspection' => 'date:M \'y',
         'created_at' => 'date:d-m-Y',
     ];
 

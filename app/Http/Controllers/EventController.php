@@ -49,7 +49,7 @@ class EventController extends Controller
             $query->orderBy($value, request('order_by', 'asc'));
         })
             ->when(!isset($request->sort_by), function ($query) {
-                $query->latest();
+                $query->latest('updated_at');
             })
             ->when($request->search, function ($query, $value) {
                 $query->where('type', 'LIKE', '%' . $value . '%')

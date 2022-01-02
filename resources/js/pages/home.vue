@@ -75,7 +75,11 @@
           v-model="selectedOpen"
           :close-on-content-click="false"
           :activator="selectedElement"
-          offset-x
+          bottom
+          left
+          offset-y
+          origin="top right"
+          transition="scale-transition"
         >
           <v-card
             color="grey lighten-4"
@@ -88,6 +92,13 @@
             >
               <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
               <div class="flex-grow-1"></div>
+              <spacer />
+              <v-btn fab
+                     color="brown"
+                     depressed
+                     @click="selectedOpen = false" >
+                <v-icon flat>mdi-close</v-icon>
+                </v-btn>
             </v-toolbar>
             <v-card-text>
               <p class="text-lg-subtitle-2">{{ selectedEvent.start }} </p>
@@ -121,15 +132,6 @@
               </div>
 
             </v-card-text>
-            <v-card-actions>
-              <v-btn
-                text
-                color="secondary"
-                @click="selectedOpen = false"
-              >
-                Cancel
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-menu>
       </v-sheet>

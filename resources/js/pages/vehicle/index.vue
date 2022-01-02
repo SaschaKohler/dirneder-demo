@@ -55,14 +55,14 @@
             v-model="form.owner"
             label="Besitzer"
             color="brown"
-            :error-messages="form.errors.name"
+            :error-messages="form.errors.owner"
             type="text"
             outlined
             dense
           />
           <v-text-field
             v-model="form.type"
-            :items="colors"
+            :error-messages="form.errors.type"
             label="Typ"
             color="brown"
             outlined
@@ -70,69 +70,97 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="form.type"
-            label="Leistung"
-            :error-messages="form.errors.type"
-            color="brown"
-            outlined
-            dense
-          />
-          <v-text-field
             v-model="form.branding"
             label="Marke"
+            :error-messages="form.errors.branding"
             color="brown"
             outlined
             dense
           />
          <v-text-field
             v-model="form.permit"
-            label="Marke"
+            label="Zulassung"
+            :error-messages="form.errors.permit"
             color="brown"
             outlined
             dense
          />
          <v-text-field
             v-model="form.insurance_type"
-            label="Marke"
+            label="Versicherung"
+            :error-messages="form.errors.insurance_type"
             color="brown"
             outlined
             dense
           />
          <v-text-field
             v-model="form.license_plate"
-            label="Marke"
+            label="Kennzeichen"
+            :error-messages="form.errors.license_plate"
+            color="brown"
+            outlined
+            dense
+          />
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :return-value.sync="form.inspection"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="dateFormattedStart"
+                :v-model="form.inspection"
+                label="Hauptuntersuchung"
+                prepend-icon="mdi-calendar"
+                readonly
+                densed
+                outlined
+                color="brown"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.inspection"
+              no-title
+              scrollable
+              locale="de"
+            >
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="error"
+                @click="menu = false"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                text
+                @click="$refs.menu.save(form.inspection)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-menu>
+         <v-text-field
+            v-model="form.insurance_company"
+            label="Vers. Unternehmen"
+            :error-messages="form.errors.insurance_company"
             color="brown"
             outlined
             dense
           />
          <v-text-field
-            v-model="form.inspection"
-            label="Marke"
+            v-model="form.insurance_manager"
+            label="Vers. Ansprech."
+            :error-messages="form.errors.insurance_manager"
             color="brown"
             outlined
             dense
           />
-
-
-<!--          <v-select-->
-<!--            v-model="form.event"-->
-<!--            :items="events"-->
-<!--            item-text="name"-->
-<!--            item-value="id"-->
-<!--            :menu-props="{ maxHeight: '400' }"-->
-<!--            label="Auftrag"-->
-<!--            multiple-->
-<!--            open-on-clear-->
-<!--            :error-messages="form.errors.employees"-->
-<!--            dense-->
-<!--            outlined-->
-<!--            clearable-->
-<!--            color="brown"-->
-<!--            item-color="brown"-->
-<!--            class="mt-2 mb-3"-->
-<!--            hint="Mitarbeiter auswählen"-->
-<!--            persistent-hint-->
-<!--          ></v-select>-->
           <v-textarea
             v-model="form.notes"
             label="Bemerkungen"
@@ -173,19 +201,20 @@
 
 <script>
 import AdminLayout from "../../layouts/AdminLayout.vue";
+import {format, parseISO} from "date-fns";
 export default {
-  props: ["items","customers","employees","count"],
-  components: { AdminLayout },
+  props: ["items", "customers", "employees", "count"],
+  components: {AdminLayout},
   data() {
     return {
       headers: [
-        { text: "No", value: "index", sortable: false },
-        { text: "Besitzer", value: "owner" },
-        { text: "Typ", value: "type" },
-        { text: "Marke", value: "branding" },
-        { text: "Kennzeichen", value: "license_plate" },
-        { text: "Pickerl", value: "inspection" },
-        { text: "Actions", value: "action", sortable: false },
+        {text: "No", value: "index", sortable: false},
+        {text: "Besitzer", value: "owner"},
+        {text: "Typ", value: "type"},
+        {text: "Marke", value: "branding"},
+        {text: "Kennzeichen", value: "license_plate"},
+        {text: "Pickerl", value: "inspection"},
+        {text: "Actions", value: "action", sortable: false},
       ],
       breadcrumbs: [
         {
@@ -199,6 +228,7 @@ export default {
           href: "/vehicles",
         },
       ],
+      menu:false,
       dialog: false,
       dialogDelete: false,
       isUpdate: false,
@@ -210,14 +240,15 @@ export default {
       params: {},
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       form: this.$inertia.form({
-        name: null,
-        start: null,
-        end: null,
+        owner: null,
         type: null,
-        color : 'dirneder',
-        customer_id: null,
-        notes: null,
-        employees: null
+        branding: null,
+        permit: null,
+        insurance_type: 'dirneder',
+        license_plate: null,
+        inspection: null,
+        insurance_company: null,
+        insurance_manager: null,
       }),
     };
   },
@@ -225,15 +256,17 @@ export default {
     formTitle() {
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
     },
+    dateFormattedStart() {
+      return this.form.inspection ? format(parseISO(this.form.inspection), 'dd\.MM\.yyyy') : ''
+    },
   },
   watch: {
     options: function (val) {
       this.params.page = val.page;
       console.log(this.$props.count)
-      if(val.itemsPerPage === -1) { // get page_size 'All' (-1)
+      if (val.itemsPerPage === -1) { // get page_size 'All' (-1)
         this.params.page_size = this.$props.count;
-      }
-      else {
+      } else {
         this.params.page_size = val.itemsPerPage
       }
       if (val.sortBy.length != 0) {
@@ -268,13 +301,15 @@ export default {
     },
     editItem(item) {
       this.form.clearErrors();
-      this.form.name = item.name;
-      this.form.start = item.start;
-      this.form.end = item.end;
+      this.form.owner = item.owner;
       this.form.type = item.type;
-      this.form.customer_id = item.customer_id;
-      this.form.notes = item.notes;
-      this.form.employees = item.employees;
+      this.form.branding = item.branding;
+      this.form.permit = item.permit;
+      this.form.insurance_type = item.insurance_type;
+      this.form.license_plate = item.license_plate;
+      this.form.inspection = item.inspection;
+      this.form.insurance_company = item.insurance_company;
+      this.form.insurance_manager = item.insurance_manager;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;

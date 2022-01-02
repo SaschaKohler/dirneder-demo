@@ -198,6 +198,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _layouts_AdminLayout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../layouts/AdminLayout.vue */ "./resources/js/layouts/AdminLayout.vue");
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/esm/format/index.js");
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/esm/parseISO/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -372,6 +402,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["items", "customers", "employees", "count"],
   components: {
@@ -412,6 +443,7 @@ __webpack_require__.r(__webpack_exports__);
         disabled: true,
         href: "/vehicles"
       }],
+      menu: false,
       dialog: false,
       dialogDelete: false,
       isUpdate: false,
@@ -423,20 +455,24 @@ __webpack_require__.r(__webpack_exports__);
       params: {},
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       form: this.$inertia.form({
-        name: null,
-        start: null,
-        end: null,
+        owner: null,
         type: null,
-        color: 'dirneder',
-        customer_id: null,
-        notes: null,
-        employees: null
+        branding: null,
+        permit: null,
+        insurance_type: 'dirneder',
+        license_plate: null,
+        inspection: null,
+        insurance_company: null,
+        insurance_manager: null
       })
     };
   },
   computed: {
     formTitle: function formTitle() {
       return this.isUpdate ? "Auftrag bearbeiten" : "Auftrag anlegen";
+    },
+    dateFormattedStart: function dateFormattedStart() {
+      return this.form.inspection ? (0,date_fns__WEBPACK_IMPORTED_MODULE_1__["default"])((0,date_fns__WEBPACK_IMPORTED_MODULE_2__["default"])(this.form.inspection), 'dd\.MM\.yyyy') : '';
     }
   },
   watch: {
@@ -486,13 +522,15 @@ __webpack_require__.r(__webpack_exports__);
     },
     editItem: function editItem(item) {
       this.form.clearErrors();
-      this.form.name = item.name;
-      this.form.start = item.start;
-      this.form.end = item.end;
+      this.form.owner = item.owner;
       this.form.type = item.type;
-      this.form.customer_id = item.customer_id;
-      this.form.notes = item.notes;
-      this.form.employees = item.employees;
+      this.form.branding = item.branding;
+      this.form.permit = item.permit;
+      this.form.insurance_type = item.insurance_type;
+      this.form.license_plate = item.license_plate;
+      this.form.inspection = item.inspection;
+      this.form.insurance_company = item.insurance_company;
+      this.form.insurance_manager = item.insurance_manager;
       this.isUpdate = true;
       this.itemId = item.id;
       this.dialog = true;
@@ -1004,7 +1042,7 @@ var render = function() {
               _c("v-icon", { attrs: { dark: "", left: "" } }, [
                 _vm._v(" mdi-plus ")
               ]),
-              _vm._v(" Neu\n      ")
+              _vm._v(" Neu\n    ")
             ],
             1
           )
@@ -1034,13 +1072,13 @@ var render = function() {
                 var index = ref.index
                 return [
                   _vm._v(
-                    "\n        " +
+                    "\n      " +
                       _vm._s(
                         (_vm.options.page - 1) * _vm.options.itemsPerPage +
                           index +
                           1
                       ) +
-                      "\n      "
+                      "\n    "
                   )
                 ]
               }
@@ -1131,7 +1169,7 @@ var render = function() {
                     attrs: {
                       label: "Besitzer",
                       color: "brown",
-                      "error-messages": _vm.form.errors.name,
+                      "error-messages": _vm.form.errors.owner,
                       type: "text",
                       outlined: "",
                       dense: ""
@@ -1147,7 +1185,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      items: _vm.colors,
+                      "error-messages": _vm.form.errors.type,
                       label: "Typ",
                       color: "brown",
                       outlined: "",
@@ -1164,24 +1202,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      label: "Leistung",
-                      "error-messages": _vm.form.errors.type,
-                      color: "brown",
-                      outlined: "",
-                      dense: ""
-                    },
-                    model: {
-                      value: _vm.form.type,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "type", $$v)
-                      },
-                      expression: "form.type"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
                       label: "Marke",
+                      "error-messages": _vm.form.errors.branding,
                       color: "brown",
                       outlined: "",
                       dense: ""
@@ -1197,7 +1219,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      label: "Marke",
+                      label: "Zulassung",
+                      "error-messages": _vm.form.errors.permit,
                       color: "brown",
                       outlined: "",
                       dense: ""
@@ -1213,7 +1236,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      label: "Marke",
+                      label: "Versicherung",
+                      "error-messages": _vm.form.errors.insurance_type,
                       color: "brown",
                       outlined: "",
                       dense: ""
@@ -1229,7 +1253,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      label: "Marke",
+                      label: "Kennzeichen",
+                      "error-messages": _vm.form.errors.license_plate,
                       color: "brown",
                       outlined: "",
                       dense: ""
@@ -1243,19 +1268,147 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      ref: "menu",
+                      attrs: {
+                        "close-on-content-click": false,
+                        "return-value": _vm.form.inspection,
+                        transition: "scale-transition",
+                        "offset-y": "",
+                        "min-width": "auto"
+                      },
+                      on: {
+                        "update:returnValue": function($event) {
+                          return _vm.$set(_vm.form, "inspection", $event)
+                        },
+                        "update:return-value": function($event) {
+                          return _vm.$set(_vm.form, "inspection", $event)
+                        }
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            return [
+                              _c(
+                                "v-text-field",
+                                _vm._g(
+                                  {
+                                    attrs: {
+                                      value: _vm.dateFormattedStart,
+                                      "v-model": _vm.form.inspection,
+                                      label: "Hauptuntersuchung",
+                                      "prepend-icon": "mdi-calendar",
+                                      readonly: "",
+                                      densed: "",
+                                      outlined: "",
+                                      color: "brown"
+                                    }
+                                  },
+                                  on
+                                )
+                              )
+                            ]
+                          }
+                        }
+                      ]),
+                      model: {
+                        value: _vm.menu,
+                        callback: function($$v) {
+                          _vm.menu = $$v
+                        },
+                        expression: "menu"
+                      }
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-date-picker",
+                        {
+                          attrs: {
+                            "no-title": "",
+                            scrollable: "",
+                            locale: "de"
+                          },
+                          model: {
+                            value: _vm.form.inspection,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "inspection", $$v)
+                            },
+                            expression: "form.inspection"
+                          }
+                        },
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { text: "", color: "error" },
+                              on: {
+                                click: function($event) {
+                                  _vm.menu = false
+                                }
+                              }
+                            },
+                            [_vm._v("\n              Abbrechen\n            ")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { text: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.$refs.menu.save(
+                                    _vm.form.inspection
+                                  )
+                                }
+                              }
+                            },
+                            [_vm._v("\n              OK\n            ")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
-                      label: "Marke",
+                      label: "Vers. Unternehmen",
+                      "error-messages": _vm.form.errors.insurance_company,
                       color: "brown",
                       outlined: "",
                       dense: ""
                     },
                     model: {
-                      value: _vm.form.inspection,
+                      value: _vm.form.insurance_company,
                       callback: function($$v) {
-                        _vm.$set(_vm.form, "inspection", $$v)
+                        _vm.$set(_vm.form, "insurance_company", $$v)
                       },
-                      expression: "form.inspection"
+                      expression: "form.insurance_company"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    attrs: {
+                      label: "Vers. Ansprech.",
+                      "error-messages": _vm.form.errors.insurance_manager,
+                      color: "brown",
+                      outlined: "",
+                      dense: ""
+                    },
+                    model: {
+                      value: _vm.form.insurance_manager,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "insurance_manager", $$v)
+                      },
+                      expression: "form.insurance_manager"
                     }
                   }),
                   _vm._v(" "),

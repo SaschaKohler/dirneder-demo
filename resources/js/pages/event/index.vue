@@ -37,6 +37,12 @@
       <template #[`item.index`]="{ index }">
         {{ (options.page - 1) * options.itemsPerPage + index + 1 }}
       </template>
+      <template v-slot:item.id="{ item }">
+        <span  class="text-caption"> {{ item.id}} </span>
+      </template>
+      <template v-slot:item.event_id="{ item }">
+        <span  class="red--text text-caption"> {{ item.event_id}} </span>
+      </template>
       <template v-slot:item.customer_id="{ item }">
         {{ item.customer.lastName }}
       </template>
@@ -244,7 +250,8 @@ export default {
     return {
       headers: [
         {text: "No", value: "index", sortable: false},
-        {text: "Bezeichner", value: "name"},
+        {text: "AuftragsId", value: "id" },
+        {text: "Auftrags-Start", value: "event_id", sortable: false},
         {text: "Termin", value: "start"},
         {text: "Leistung", value: "type"},
         {text: "Kunde", value: "customer_id"},

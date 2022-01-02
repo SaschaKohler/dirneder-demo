@@ -435,6 +435,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -449,8 +455,12 @@ __webpack_require__.r(__webpack_exports__);
         value: "index",
         sortable: false
       }, {
-        text: "Bezeichner",
-        value: "name"
+        text: "AuftragsId",
+        value: "id"
+      }, {
+        text: "Auftrags-Start",
+        value: "event_id",
+        sortable: false
       }, {
         text: "Termin",
         value: "start"
@@ -1241,6 +1251,28 @@ var render = function() {
                       ) +
                       "\n    "
                   )
+                ]
+              }
+            },
+            {
+              key: "item.id",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c("span", { staticClass: "text-caption" }, [
+                    _vm._v(" " + _vm._s(item.id) + " ")
+                  ])
+                ]
+              }
+            },
+            {
+              key: "item.event_id",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c("span", { staticClass: "red--text text-caption" }, [
+                    _vm._v(" " + _vm._s(item.event_id) + " ")
+                  ])
                 ]
               }
             },

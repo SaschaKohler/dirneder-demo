@@ -401,6 +401,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -1237,7 +1239,10 @@ var render = function() {
         [
           _c(
             "v-sheet",
-            { staticClass: "d-flex", attrs: { tile: "", height: "54" } },
+            {
+              staticClass: "d-flex justify-center",
+              attrs: { tile: "", height: "54" }
+            },
             [
               _c(
                 "v-btn",
@@ -1256,6 +1261,7 @@ var render = function() {
               _vm._v(" "),
               _c("v-select", {
                 staticClass: "ma-2",
+                staticStyle: { "max-width": "150px" },
                 attrs: {
                   items: _vm.types,
                   "item-text": "name",
@@ -1275,8 +1281,26 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
+              _vm.$refs.calendar
+                ? _c(
+                    "v-toolbar-title",
+                    {
+                      staticClass: "text-center pt-2 text-h4",
+                      staticStyle: { width: "300px" }
+                    },
+                    [
+                      _vm._v(
+                        "\n        " +
+                          _vm._s(_vm.$refs.calendar.title) +
+                          "\n      "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c("v-select", {
                 staticClass: "ma-2",
+                staticStyle: { "max-width": "150px" },
                 attrs: {
                   items: _vm.weekdays,
                   dense: "",
@@ -1293,18 +1317,6 @@ var render = function() {
                   expression: "weekday"
                 }
               }),
-              _vm._v(" "),
-              _vm.$refs.calendar
-                ? _c("v-toolbar-title", { staticClass: "pt-3 pl-3" }, [
-                    _vm._v(
-                      "\n        " +
-                        _vm._s(_vm.$refs.calendar.title) +
-                        "\n      "
-                    )
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("v-spacer"),
               _vm._v(" "),
               _c(
                 "v-btn",

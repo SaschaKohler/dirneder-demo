@@ -75,7 +75,7 @@ class RecurrenceObserver
                 }
 
             $employeeIds = array();
-            $vehiclesIds = array();
+            $vehicleIds = array();
 
             foreach (static::$request->employees as $employee){
                 $employeeIds[] = $employee['id'];

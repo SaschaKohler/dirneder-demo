@@ -14,7 +14,7 @@ class VehicleController extends Controller
             $query->orderBy($value, request('order_by', 'asc'));
         })
             ->when(!isset($request->sort_by), function ($query) {
-                $query->latest();
+                $query->latest('updated_at');
             })
             ->when($request->search, function ($query, $value) {
                 $query->where('type', 'LIKE', '%' . $value . '%')
@@ -42,18 +42,22 @@ class VehicleController extends Controller
         ]);
     }
 
-    public function update(Vehicle $user, Request $request)
+    public function update(Vehicle $vehicle, Request $request)
     {
         $data = $this->validate($request, [
-            'name' => 'required|string',
-            'email' => 'required',
-            'category_id' => 'required',
-            'isActive' => 'required',
-            'role' => 'required'
+            'owner' => 'required|string',
+            'type' => 'required',
+            'branding' => 'required',
+            'permit' => 'required',
+            'insurance_type' => 'required',
+            'license_plate' => 'required',
+            'inspection' => 'required',
+            'insurance_company' => 'required',
+            'insurance_manager' => 'required',
         ]);
 
 
-        $user->update($data);
+        $vehicle->update($data);
 
         return redirect()->back()->with('message', [
             'type' => 'success',
